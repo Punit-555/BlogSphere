@@ -43,8 +43,9 @@ function Home() {
         setTimeout(() => {
           setIsLoading(false);
         }, 1000);
+        console.log("DATA", response);
         setAllPostData(response?.data);
-        return response.data;
+        return response?.data;
       } catch (error) {
         console.error(error);
         return error;
@@ -52,6 +53,7 @@ function Home() {
     };
     getAllPost();
   }, []);
+  
   console.log("POSTS", allPostData);
   return (
     <div className="home_container">
