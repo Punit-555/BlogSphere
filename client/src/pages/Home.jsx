@@ -30,7 +30,7 @@ const CardContent = ({ text, val }) => {
 
 function Home() {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [allPostData, setAllPostData] = useState();
+  const [allPostData, setAllPostData] = useState([]);
   const { setIsLoading } = useContext(LoaderContext);
 
   useEffect(() => {
