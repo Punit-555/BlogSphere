@@ -129,6 +129,7 @@ const Auth = ({ isOpen, onClose }) => {
     }
   };
 
+  console.log("sadkfjbaskdufhvkasdgvkasdf")
   if (!isOpen) return null;
 
   return (
