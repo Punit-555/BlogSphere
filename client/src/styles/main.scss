@@ -1,0 +1,48 @@
+$primary-color: #FFFF;
+$bodyFont: "Rubik", sans-serif;
+$textColor: white;
+$transition-duration: 0.3s;
+$transition-ease: ease-in-out;
+$general-padding: 120px;
+$text-primary-color : "#2f2e2e";
+$backgroundColor : "#2F2E2F";
+
+@import 'header';
+@import 'modal';
+@import 'home';
+@import 'form';
+
+
+
+body {
+    font-family: $bodyFont;
+    background-color: $primary-color;
+    margin: 0;
+    padding: 0;
+}
+
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 8px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #2F2E2F;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+}
