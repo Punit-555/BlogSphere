@@ -88,7 +88,6 @@ const Auth = ({ isOpen, onClose }) => {
       } catch (error) {
         setIsLoading(false);
         toast.error(error.response?.data.error);
-        console.log(error);
       }
     }
   };
@@ -127,7 +126,6 @@ const Auth = ({ isOpen, onClose }) => {
     } catch (error) {
       setIsLoading(false);
       toast.error(error.response?.data.error);
-      console.log(error);
     }
   };
 
