@@ -52,7 +52,7 @@ function Home() {
     };
     getAllPost();
   }, []);
-
+  console.log("POSTS", allPostData);
   return (
     <div className="home_container">
       <section className="banner_section">
@@ -96,27 +96,27 @@ function Home() {
       <h1>All Posts</h1>
       <section className="blog_section">
         <div className="card_container">
-          {allPostData?.map((val, index) => {
-            return (
-              <div className="card" key={index}>
-                <h3>
-                  {val?.title} ,
-                  <span
-                    style={{
-                      color: "grey",
-                      fontWeight: "100",
-                      fontSize: "0.9em",
-                    }}
-                  >
-                    {/* {convertDate(val?.created_at)} */}
-                    &nbsp; 2 min ago
-                  </span>
-                </h3>
-                <CardContent text={val?.content} val={val} />
-                <br />
-              </div>
-            );
-          })}
+          {allPostData.length > 0 &&
+            allPostData?.map((val, index) => {
+              return (
+                <div className="card" key={index}>
+                  <h3>
+                    {val?.title} ,
+                    <span
+                      style={{
+                        color: "grey",
+                        fontWeight: "100",
+                        fontSize: "0.9em",
+                      }}
+                    >
+                      &nbsp; 2 min ago
+                    </span>
+                  </h3>
+                  <CardContent text={val?.content} val={val} />
+                  <br />
+                </div>
+              );
+            })}
         </div>
       </section>
     </div>
