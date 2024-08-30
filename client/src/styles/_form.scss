@@ -1,0 +1,151 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+
+
+    .input_container {
+        display: flex;
+        flex-direction: column;
+
+        input {
+            width: 100%;
+            padding: 12px;
+        }
+    }
+
+    .select_field {
+        width: 100%;
+        outline: none;
+        padding: 8px;
+        border-radius: 4px;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        -ms-border-radius: 4px;
+        -o-border-radius: 4px;
+        max-width: 97%;
+        height: 40px;
+        font-family: $bodyFont;
+
+
+    }
+
+    .input_field {
+        border-radius: 6px;
+        max-width: 95%;
+        border: 1px solid grey;
+        height: 20px;
+        font-size: 1rem;
+
+    }
+
+    .textarea_field {
+        border-radius: 6px;
+        max-width: 96%;
+        font-size: 1.2rem;
+        padding: 8px;
+        font-family: $bodyFont;
+    }
+
+    .signup_btn {
+        width: 100%;
+        padding: 14px;
+        background-color: #ff5f5f;
+        border: none;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        -ms-border-radius: 8px;
+        -o-border-radius: 8px;
+        font-size: 1.2rem;
+        color: white;
+    }
+
+    label {
+        font-weight: 600;
+    }
+
+    .btn_group {
+        display: flex;
+        justify-content: right;
+        gap: 20px;
+
+
+
+    }
+}
+
+.auth_heading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+
+label {
+    color: $text-primary-color;
+    font-weight: 600;
+}
+
+.create-btn {
+    cursor: pointer;
+    width: 100px;
+    border: none;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    background-color: #2F2E2F;
+    padding: 16px;
+    border: 1px solid #eee;
+    color: $primary-color;
+    font-family: $bodyFont;
+
+    &:hover {
+        border: 1px solid #2F2E2F;
+        background-color: $primary-color;
+        color: #2F2E2F;
+        transition: all 0.5s ease-in-out;
+        -webkit-transition: all 0.5s ease-in-out;
+        -moz-transition: all 0.5s ease-in-out;
+        -ms-transition: all 0.5s ease-in-out;
+        -o-transition: all 0.5s ease-in-out;
+    }
+
+    &:active {
+        border: 1px solid #2F2E2F;
+        background-color: $primary-color;
+        color: #2F2E2F;
+        transition: all 0.5s ease-in-out;
+        -webkit-transition: all 0.5s ease-in-out;
+        -moz-transition: all 0.5s ease-in-out;
+        -ms-transition: all 0.5s ease-in-out;
+        -o-transition: all 0.5s ease-in-out;
+
+    }
+}
+
+.error {
+    color: #ff5f5f;
+    line-height: 0.5rem;
+}
+
+.select_field_input {
+    width: 120px;
+    padding: 10px 10px 10px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
+    font-family: $bodyFont;
+    background-color: #2F2E2F;
+    color: white;
+}

@@ -1,0 +1,205 @@
+.home_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px $general-padding;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.banner_section {
+
+    h1,
+    p {
+        color: #2F2E2E !important;
+    }
+
+    .banner_image {
+        box-shadow: 25px 20px #2F2E2F;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        -ms-border-radius: 8px;
+        -o-border-radius: 8px;
+    }
+
+    .readMore {
+        cursor: pointer;
+        width: 180px;
+        padding: 16px;
+        color: white;
+        font-weight: 600;
+        font-size: 1.3rem;
+        border: none;
+        background-color: #2F2E2E;
+        border-radius: 6px;
+        -webkit-border-radius: 6px;
+        -moz-border-radius: 6px;
+        -ms-border-radius: 6px;
+        -o-border-radius: 6px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+}
+
+.image-placeholder {
+    width: 600px;
+    height: 400px;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+}
+
+
+.blog_section {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+}
+
+
+
+
+.card_container {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
+    transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
+    padding: 14px 80px 18px 36px;
+    cursor: pointer;
+    max-width: 290px;
+    min-width: 295px;
+    min-height: 260px;
+    max-height: 260px;
+
+    p {
+        text-align: left;
+        width: 100%;
+    }
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
+}
+
+.card h3 {
+    font-weight: 600;
+}
+
+.card img {
+    position: absolute;
+    top: 20px;
+    right: 15px;
+    max-height: 120px;
+}
+
+.card-1 {
+    background-image: url(https://ionicframework.com/img/getting-started/ionic-native-card.png);
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 80px;
+}
+
+.card-2 {
+    background-image: url(https://ionicframework.com/img/getting-started/components-card.png);
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 80px;
+}
+
+.card-3 {
+    background-image: url(https://ionicframework.com/img/getting-started/theming-card.png);
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 80px;
+}
+
+@media(max-width: 990px) {
+    .card {
+        margin: 20px;
+    }
+}
+
+.blog_container {
+    padding: 0px $general-padding;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.blogCard {
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
+    transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
+    padding: 14px 80px 18px 36px;
+    cursor: pointer;
+
+    p {
+        text-align: left;
+        width: 100%;
+    }
+
+    &:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
+    }
+}
+
+
+
+.deleteButton {
+    position: absolute;
+    /* Positioning the button */
+    top: 10px;
+    /* Distance from the top of the card */
+    right: 10px;
+    /* Distance from the right side of the card */
+    background-color: transparent;
+    /* No background */
+    border: none;
+    /* No border */
+    font-size: 20px;
+    /* Icon size */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    color: red;
+    /* Icon color */
+}
+
+.deleteButton:hover {
+    color: darkred;
+    /* Darker color on hover for better UX */
+}
+
+.profile_container {
+    padding: 0px $general-padding;
+    display: flex;
+    height: calc(100vh - 200px);
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    .form_outline {
+        border: 1px solid #eee;
+        width: 100%;
+        min-width: calc(100vw - 600px);
+    }
+}
