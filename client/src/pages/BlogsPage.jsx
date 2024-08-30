@@ -90,7 +90,6 @@ function BlogsPage() {
         setIsLoading(false);
       }, 1500);
     } catch (error) {
-      console.log(error);
     }
   };
   useEffect(() => {
@@ -109,7 +108,6 @@ function BlogsPage() {
         toast.success(response?.message);
         fetchData();
       } catch (error) {
-        console.log(error);
       }
     } else {
       toast.error("Login to delete the Posts!");
