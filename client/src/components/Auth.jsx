@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { loginUserAPI, signupUserAPI } from "../api/userAuth";
 import { LoaderContext } from "../context/LoaderContext";

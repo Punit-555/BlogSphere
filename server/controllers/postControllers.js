@@ -111,3 +111,37 @@ exports.deletePost = (req, res) => {
         res.json({ message: 'Post deleted' });
     });
 };
+
+
+
+exports.searchPosts = (req, res) => {
+   
+
+    const { searchType, searchValue } = req.body;
+
+    let query = 'SELECT * FROM posts WHERE';
+    let queryParams = [];
+
+    if (searchType === 'title') {
+        query += ' title = ? OR title LIKE ? OR LOWER(title) LIKE ?';
+        queryParams = [searchValue, `%${searchValue}%`, `%${searchValue.toLowerCase()}%`];
+    } else if (searchType === 'category') {
+        query += ' category = ?';
+        queryParams = [searchValue];
+    } else if (searchType === 'createdAt') {
+        query += ' created_at = ?';
+        queryParams = [searchValue];
+    } else {
+        return res.status(400).json({ error: 'Invalid search type' });
+    }
+
+    db.query(query, queryParams, (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+
+        console.log("RESULTS", results);
+        res.json(results);
+    });
+}

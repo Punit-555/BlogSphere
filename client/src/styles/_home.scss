@@ -62,10 +62,32 @@
 .blog_section {
     width: 100%;
     display: flex;
+    flex-direction: column;
     gap: 20px;
+    margin-top: 60px;
 }
 
+.search_container {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+}
 
+.form_select {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    border: 1px solid #eee;
+    cursor: pointer;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
+    margin-top: 4px;
+}
 
 
 .card_container {
@@ -115,26 +137,6 @@
     max-height: 120px;
 }
 
-.card-1 {
-    background-image: url(https://ionicframework.com/img/getting-started/ionic-native-card.png);
-    background-repeat: no-repeat;
-    background-position: right;
-    background-size: 80px;
-}
-
-.card-2 {
-    background-image: url(https://ionicframework.com/img/getting-started/components-card.png);
-    background-repeat: no-repeat;
-    background-position: right;
-    background-size: 80px;
-}
-
-.card-3 {
-    background-image: url(https://ionicframework.com/img/getting-started/theming-card.png);
-    background-repeat: no-repeat;
-    background-position: right;
-    background-size: 80px;
-}
 
 @media(max-width: 990px) {
     .card {
@@ -190,7 +192,6 @@
 
 .deleteButton:hover {
     color: darkred;
-    /* Darker color on hover for better UX */
 }
 
 .profile_container {
@@ -220,4 +221,36 @@
     left: 90%;
     font-size: 18px;
     cursor: pointer;
+}
+
+.btn_group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-btn {
+    margin-top: 23px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 150px;
+    border: 1.5px solid #eee;
+    padding: 13px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+    cursor: pointer;
+    background-color: #2F2E2E;
+
+    color: white;
+
+    &:hover {
+        color: white;
+        border: black;
+    }
 }

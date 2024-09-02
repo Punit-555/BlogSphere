@@ -13,6 +13,15 @@ $backgroundColor : "#2F2E2F";
 @import 'form';
 
 
+.heading {
+    &_h1 {
+        font-size: 2rem;
+    }
+
+    &_h2 {
+        font-size: 1.7rem;
+    }
+}
 
 body {
     font-family: $bodyFont;

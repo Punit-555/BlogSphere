@@ -77,4 +77,27 @@ const updateUser = async (payload) => {
     }
 }
 
-export { createPost, allPostsByUser, deletePost, updateUser };
+const searchPosts = async (payload) => {
+    console.log("PAYLOASD", payload);
+    try {
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/posts/search-posts`, {
+            searchType: payload?.selectedCategory,
+            searchValue: payload.enteredValue
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        }
+
+        );
+        return response;
+    } catch (error) {
+        console.error('Error signing up user:', error);
+        throw error;
+    }
+}
+
+
+
+export { createPost, allPostsByUser, deletePost, updateUser, searchPosts };

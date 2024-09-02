@@ -23,6 +23,7 @@ router.put('/posts/:id', authMiddleware, postController.updatePost);
 // delete Posts 
 router.delete('/delete/:id', authMiddleware, postController.deletePost);
 
+router.post("/search-posts", postController.searchPosts);
 
 
 module.exports = router;
