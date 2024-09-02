@@ -198,8 +198,12 @@
     }
 
     .form_outline {
-        border: 1px solid #eee;
+        // border: 1px solid #eee;
         width: 100%;
         min-width: calc(100vw - 600px);
+
+        input {
+            height: 42px;
+        }
     }
 }

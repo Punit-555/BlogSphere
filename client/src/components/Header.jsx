@@ -4,10 +4,12 @@ import Auth from "./Auth";
 import { VscAccount } from "react-icons/vsc";
 import { toast } from "react-toastify";
 import { LoaderContext } from "../context/LoaderContext";
+import { AuthContext } from "../context/userAuth";
 
 const Header = () => {
   const [isModalOpen, setModalOpen] = useState(true);
   const [profile, setProfile] = useState();
+  const { userDetails } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const openModal = () => setModalOpen(true);
@@ -84,15 +86,11 @@ const Header = () => {
               onChange={handleProfileChange}
             >
               <option value="" selected disabled>
-                Account
+                Hi, {userDetails?.name?.split(" ")[0]}
               </option>
               <option value="profile">Profile</option>
               <option value="logout">Logout</option>
             </select>
-            {/* <button className="user_btn" onClick={logoutHandler}>
-              Logout
-              <VscAccount />
-            </button> */}
           </div>
         ) : (
           <button className="user_btn" onClick={openModal}>

@@ -6,7 +6,7 @@ import { LoaderContext } from "../context/LoaderContext";
 import { fetchUpdatedUserDetails } from "../api/getApi";
 
 function Profile() {
-  const { userDetails } = useContext(AuthContext);
+  const { userDetails, setUserDetails } = useContext(AuthContext);
   const { setIsLoading } = useContext(LoaderContext);
 
   const [formData, setFormData] = useState({
@@ -33,17 +33,19 @@ function Profile() {
     try {
       setIsLoading(true);
       const res = await updateUser(payload);
+      console.log("REEE", res);
       setTimeout(() => {
         setIsLoading(false);
       }, 1000);
-      toast.success(res?.message);
+      toast.success(res?.data?.message);
       fetchUpdatedUserDetails();
+      setUserDetails({
+        ...res?.data?.user,
+      });
     } catch (error) {
       console.log(error);
     }
   };
-
-  console.log("UDER", userDetails, formData);
 
   useEffect(() => {
     setFormData({
@@ -57,7 +59,9 @@ function Profile() {
   return (
     <div className="profile_container">
       <section className="profile_section">
-        <h3>Hii, {userDetails?.name}</h3>
+        <h3 style={{ fontWeight: "600", fontSize: "2.5rem", color: "#f2f2e" }}>
+          Hii, <span>{userDetails?.name} </span>{" "}
+        </h3>
         <div className="form form_outline">
           <div className="input_container">
             <label htmlFor="">Name</label>
@@ -82,7 +86,8 @@ function Profile() {
           <div className="input_container">
             <label htmlFor="">Phone Number</label>
             <input
-              type="phoneNumber"
+              maxLength={10}
+              type="number"
               className="input_field"
               onChange={handleChange}
               name="phoneNumber"
