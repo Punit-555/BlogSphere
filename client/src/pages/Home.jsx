@@ -3,8 +3,7 @@ import bannerImage from "../assets/banner-img.jpg";
 import { TiArrowRightThick } from "react-icons/ti";
 import axios from "axios";
 import { LoaderContext } from "../context/LoaderContext";
-import { AuthContext } from "../context/userAuth";
-import { getSpecificUserDetails } from "../api/getApi";
+import { FaArrowRight } from "react-icons/fa6";
 
 const truncateText = (text, limit) => {
   const words = text.split(" ");
@@ -25,6 +24,10 @@ const CardContent = ({ text, val }) => {
           {isExpanded ? "Show Less" : "Continue reading..."}
         </p>
       )}
+
+      <p className="card_arrow_icon">
+        <FaArrowRight />
+      </p>
     </div>
   );
 };
