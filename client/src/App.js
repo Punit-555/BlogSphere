@@ -10,15 +10,42 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import BlogsPage from "./pages/BlogsPage";
 import Profile from "./pages/Profile";
+import { AuthContext } from "./context/userAuth";
+import { getSpecificUserDetails } from "./api/getApi";
 function App() {
   const { isLoading, setIsLoading } = useContext(LoaderContext);
+  const { setUserDetails } = useContext(AuthContext);
+  const userData = JSON.parse(localStorage.getItem("user_details"));
+  useEffect(() => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+
+  }, [setIsLoading]);
 
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
-  }, [setIsLoading]);
+    const fetchUpdatedUserDetails = async () => {
+      if (!userData?.id) {
+        setIsLoading(false);
+        return;
+      }
+      try {
+        const res = await getSpecificUserDetails(userData?.id);
+        setUserDetails(res[0]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUpdatedUserDetails();
+  }, [setIsLoading, setUserDetails]);
+
 
   return (
     <div className="p-4">

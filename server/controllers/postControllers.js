@@ -21,12 +21,9 @@ exports.getPostById = (req, res) => {
     });
 };
 
-
 // Get all  post created By User (available to all users)
 exports.getPostByUser = (req, res) => {
     const { userId } = req.user;
-  
-
     const sql = `SELECT * FROM  posts WHERE  user_id = ${userId} order by created_at desc  `;
 
     // Execute the query with parameterized id
@@ -35,7 +32,6 @@ exports.getPostByUser = (req, res) => {
             console.error('Database error:', err);
             return res.status(500).json({ error: 'Internal server error' });
         }
-
         if (results.length === 0) {
             return res.status(404).json({ message: 'No posts found for this user' });
         }

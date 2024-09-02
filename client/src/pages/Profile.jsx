@@ -1,25 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/userAuth";
 
 function Profile() {
-  const userDetails = JSON.parse(localStorage.getItem("user_details"));
+  const { userDetails } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phoneNumber: "",
-    password: "",
+    name: userDetails?.name,
+    email: userDetails?.email,
+    phoneNumber: userDetails?.phoneNumber,
+    // password: ,
   });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const sumbitHandler = async (e) => {
+    e.preventDefault();
+  };
+
+  console.log("UDER", userDetails, formData);
 
   useEffect(() => {
     setFormData({
-      name: userDetails.name,
-      email: userDetails.email,
-      phoneNumber: userDetails.phoneNumber,
-      password: "",
+      name: userDetails?.name,
+      email: userDetails?.email,
+      phoneNumber: userDetails?.phoneNumber,
+      // password: ,
     });
   }, [userDetails]);
-
-  const handleChange = () => {};
 
   return (
     <div className="profile_container">
@@ -57,7 +70,14 @@ function Profile() {
             />
           </div>
           <div className="button_group">
-            <button className="create-btn">Submit</button>
+            <button
+              className="create-btn"
+              onClick={(e) => {
+                sumbitHandler(e);
+              }}
+            >
+              Update
+            </button>
           </div>
         </div>
       </section>

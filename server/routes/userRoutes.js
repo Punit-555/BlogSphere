@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
-// const { authenticateToken } = require('../middleware/authMiddleware');
 const jwt = require('jsonwebtoken');
 const authMiddleware = require('../middleware/authMiddleware');
 
@@ -27,6 +26,7 @@ router.post('/signup', userController.signup);
 router.post('/login', userController.login);
 router.post('/logout', authenticateToken, userController.logout);
 router.delete('/user-delete/:id', authMiddleware, userController.deleteUser);
-// router.post('/password-reset', userController.resetPassword);
+router.post('/updateUser/:id', authMiddleware, userController.updateUser);
+router.get('/userDetails/:id', authMiddleware, userController.getUpdatedUser);
 
 module.exports = router;

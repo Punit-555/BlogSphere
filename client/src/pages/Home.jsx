@@ -4,6 +4,7 @@ import { TiArrowRightThick } from "react-icons/ti";
 import axios from "axios";
 import { LoaderContext } from "../context/LoaderContext";
 import { AuthContext } from "../context/userAuth";
+import { getSpecificUserDetails } from "../api/getApi";
 
 const truncateText = (text, limit) => {
   const words = text.split(" ");
@@ -53,8 +54,7 @@ function Home() {
     };
     getAllPost();
   }, []);
-  
-  console.log("POSTS", allPostData);
+
   return (
     <div className="home_container">
       <section className="banner_section">

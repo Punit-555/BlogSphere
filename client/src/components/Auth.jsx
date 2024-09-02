@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { loginUserAPI, signupUserAPI } from "../api/userAuth";
 import { LoaderContext } from "../context/LoaderContext";
@@ -8,7 +8,7 @@ const Auth = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
   const { setIsLoading } = useContext(LoaderContext);
   const { setIsUserLoggedIn } = useContext(AuthContext);
-  const { setUserDetails, userDetails } = useContext(AuthContext);
+  const { setUserDetails } = useContext(AuthContext);
 
   const [loginForm, setLoginForm] = useState({
     email: "",
@@ -129,7 +129,6 @@ const Auth = ({ isOpen, onClose }) => {
     }
   };
 
-  console.log("sadkfjbaskdufhvkasdgvkasdf")
   if (!isOpen) return null;
 
   return (

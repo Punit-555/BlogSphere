@@ -114,7 +114,6 @@ exports.login = (req, res) => {
                 return res.status(400).json({ error: 'Invalid email or password' });
             }
 
-            // Remove sensitive information before sending it back to the client
             delete user.password;  // Exclude the password from user details
 
             const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
@@ -206,3 +205,63 @@ exports.deleteUser = (req, res) => {
         });
     });
 };
+
+
+
+
+exports.updateUser = async (req, res) => {
+    const { name, email } = req.body;
+    const { id } = req.params;
+    console.log("ID", id, name, email);
+    // Validate user ID
+    if (!id) {
+        return res.status(400).json({ message: 'User ID is required.' });
+    }
+
+    // Validate request body
+    if (!name || !email) {
+        return res.status(400).json({ message: 'Name and email are required.' });
+    }
+
+    // Use parameterized query to prevent SQL injection
+    const updateQuery = `UPDATE users SET name = ?, email = ? WHERE id = ?`;
+
+    try {
+        db.query(updateQuery, [name, email, id], (err, results) => {
+            if (err) {
+                console.error('Error querying user:', err);
+                return res.status(500).json({ error: 'Failed to update user.' });
+            }
+
+            if (results.affectedRows === 0) {
+                return res.status(404).json({ message: 'User not found.' });
+            }
+
+            // Respond with success message and updated user details
+            res.status(200).json({ message: 'User updated successfully.', user: { id, name, email } });
+        });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ message: 'An error occurred while updating the user.' });
+    }
+};
+
+
+exports.getUpdatedUser = (req, res) => {
+    const { id } = req.params;
+    const sql = `SELECT * FROM  users WHERE  id = ${id}  `;
+
+    db.query(sql, [id], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'No user Found!' });
+        }
+
+        res.json(results);
+    });
+};
+
+
