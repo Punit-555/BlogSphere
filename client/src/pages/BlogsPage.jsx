@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { allPostsByUser, createPost, deletePost } from "../api/postApi";
 import { LoaderContext } from "../context/LoaderContext";
 import { AuthContext } from "../context/userAuth";
+import { convertDate } from "../utility";
 
 function BlogsPage() {
   const { setIsLoading } = useContext(LoaderContext);
@@ -89,8 +90,7 @@ function BlogsPage() {
       setTimeout(() => {
         setIsLoading(false);
       }, 1500);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchData();
@@ -107,8 +107,7 @@ function BlogsPage() {
 
         toast.success(response?.message);
         fetchData();
-      } catch (error) {
-      }
+      } catch (error) {}
     } else {
       toast.error("Login to delete the Posts!");
       return;
@@ -195,7 +194,7 @@ function BlogsPage() {
                   <h4>{val?.category}</h4>
                   <p>{val?.content}</p>
                   <span style={{ color: "grey", fontWeight: "100" }}>
-                    2 min ago
+                    {convertDate(val?.created_at)}
                   </span>
                 </div>
               );

@@ -3,7 +3,7 @@ const db = require('../config/db');
 
 // Get all posts (available to all users)
 exports.getAllPosts = (req, res) => {
-    const sql = 'SELECT * FROM posts';
+    const sql = 'SELECT * FROM posts as p join users as u on p.user_id =  u.id  ';
     db.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(results);
@@ -115,7 +115,7 @@ exports.deletePost = (req, res) => {
 
 
 exports.searchPosts = (req, res) => {
-   
+
 
     const { searchType, searchValue } = req.body;
 

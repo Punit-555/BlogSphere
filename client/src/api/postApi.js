@@ -78,7 +78,6 @@ const updateUser = async (payload) => {
 }
 
 const searchPosts = async (payload) => {
-    console.log("PAYLOASD", payload);
     try {
         const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/posts/search-posts`, {
             searchType: payload?.selectedCategory,

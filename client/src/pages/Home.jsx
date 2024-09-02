@@ -7,6 +7,8 @@ import { FaArrowRight } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { IoSearch } from "react-icons/io5";
 import { searchPosts } from "../api/postApi";
+import { convertDate } from "../utility";
+import dummyCard from "../assets/dummy_card.jpg";
 
 const truncateText = (text, limit) => {
   const words = text.split(" ");
@@ -28,9 +30,12 @@ const CardContent = ({ text, val }) => {
         </p>
       )}
 
-      <p className="card_arrow_icon">
-        <FaArrowRight />
-      </p>
+      <button className="card_arrow_icon arrow_btn">
+        <p className="">
+          Read more &nbsp;
+          <FaArrowRight />
+        </p>
+      </button>
     </div>
   );
 };
@@ -57,7 +62,6 @@ function Home() {
           setIsLoading(false);
         }, 1000);
         setAllPostData(response?.data);
-        return response?.data;
       } catch (error) {
         console.error(error);
         return error;
@@ -78,8 +82,7 @@ function Home() {
       try {
         setIsLoading(true);
         const response = await searchPosts(selectedOption);
-        setAllPostData(response?.data);
-
+        setAllPostData(response);
         setTimeout(() => {
           setIsLoading(false);
         }, 500);
@@ -87,7 +90,9 @@ function Home() {
         console.log(error);
       }
     };
-    searchData();
+    if (selectedOption?.enteredValue !== "") {
+      searchData();
+    }
   }, [selectedOption]);
 
   return (
@@ -200,6 +205,7 @@ function Home() {
             </div>
           </div>
         </div>
+
         <div className="card_container">
           {allPostData.length > 0 &&
             allPostData?.map((val, index) => {
@@ -211,18 +217,16 @@ function Home() {
                     navigate(`/${val?.id}`);
                   }}
                 >
-                  <h3>
-                    {val?.title} ,
-                    <span
-                      style={{
-                        color: "grey",
-                        fontWeight: "100",
-                        fontSize: "0.9em",
-                      }}
-                    >
-                      &nbsp; 2 min ago
+                  <div>
+                    <img src={dummyCard} alt="" />
+                  </div>
+                  <h3>{val?.title}</h3>
+                  <p style={{ fontSize: "1rem", color: "grey" }}>
+                    Created By: {val?.name},{" "}
+                    <span style={{ position: "absolute", right: "30px" }}>
+                      {convertDate(val?.created_at)}{" "}
                     </span>
-                  </h3>
+                  </p>{" "}
                   <CardContent text={val?.content} val={val} />
                   <br />
                 </div>
