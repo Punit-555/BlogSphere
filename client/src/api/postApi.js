@@ -1,7 +1,6 @@
 import axios from "axios"
 const token = localStorage.getItem("access_token");
 const createPost = async (payload) => {
-    const token = localStorage.getItem("access_token");
     try {
         const response = await axios.post(`http://localhost:8080/posts/create`, payload, {
             headers: {
@@ -59,5 +58,23 @@ const deletePost = async (id) => {
     }
 }
 
+const updateUser = async (payload) => {
+    try {
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/updateUser/${payload?.id}`, {
+            ...payload.formData
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        }
 
-export { createPost, allPostsByUser, deletePost };
+        );
+        return response;
+    } catch (error) {
+        console.error('Error signing up user:', error);
+        throw error;
+    }
+}
+
+export { createPost, allPostsByUser, deletePost, updateUser };

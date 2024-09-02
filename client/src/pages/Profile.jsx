@@ -1,8 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/userAuth";
+import { updateUser } from "../api/postApi";
+import { toast } from "react-toastify";
+import { LoaderContext } from "../context/LoaderContext";
+import { fetchUpdatedUserDetails } from "../api/getApi";
 
 function Profile() {
   const { userDetails } = useContext(AuthContext);
+  const { setIsLoading } = useContext(LoaderContext);
 
   const [formData, setFormData] = useState({
     name: userDetails?.name,
@@ -21,6 +26,21 @@ function Profile() {
 
   const sumbitHandler = async (e) => {
     e.preventDefault();
+    const payload = {
+      formData,
+      id: userDetails.id,
+    };
+    try {
+      setIsLoading(true);
+      const res = await updateUser(payload);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+      toast.success(res?.message);
+      fetchUpdatedUserDetails();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   console.log("UDER", userDetails, formData);
