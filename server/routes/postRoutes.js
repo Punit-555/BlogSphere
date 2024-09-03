@@ -11,19 +11,21 @@ router.get('/all-posts', postController.getAllPosts);
 // Create Posts 
 router.post('/create', authMiddleware, postController.createPost);
 
-// find Posts 
-// router.get('/postByID/:id', authMiddleware, postController.getPostById);
+// find Posts Details
+router.post('/search-posts', postController.searchPosts);
 
-// find Posts by User 
+// Find Posts by User 
 router.post('/postByUser', authMiddleware, postController.getPostByUser);
 
 // update Posts 
-router.put('/posts/:id', authMiddleware, postController.updatePost);
+// router.put('/posts/:id', authMiddleware, postController.updatePost);
 
 // delete Posts 
 router.delete('/delete/:id', authMiddleware, postController.deletePost);
 
-router.post("/search-posts", postController.searchPosts);
+// post details 
+router.post("/post-details", postController.searchPosts);
+
 
 
 module.exports = router;

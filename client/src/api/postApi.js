@@ -98,5 +98,19 @@ const searchPosts = async (payload) => {
 }
 
 
+const blogDetails = async (id) => {
+    try {
+        const response = await axios.get(
+            `${process.env.REACT_APP_BASE_URL}/posts/postByID/${id}`,
+        );
+        // console.log("ABOOOOO", response);
+        return response;
+    } catch (error) {
+        console.error('Error fetching posts by user:', error);
+        return error;
+    }
+}
 
-export { createPost, allPostsByUser, deletePost, updateUser, searchPosts };
+
+
+export { createPost, allPostsByUser, deletePost, updateUser, searchPosts, blogDetails };

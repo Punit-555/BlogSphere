@@ -287,3 +287,27 @@
     }
 
 }
+
+
+.blog_detail_container {
+    margin-top: 20px;
+    padding: 0px $general-padding;
+    height: 100%;
+
+    .blog_para {
+        font-size: 1, 2rem;
+        font-weight: 400;
+    }
+
+    .detail_img {
+        width: 100%;
+        max-height: 480px;
+        border-radius: 12px;
+        -webkit-border-radius: 12px;
+        -moz-border-radius: 12px;
+        -ms-border-radius: 12px;
+        -o-border-radius: 12px;
+    }
+
+    &_data {}
+}

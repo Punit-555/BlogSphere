@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import bannerImage from "../assets/banner-img.jpg";
 import { TiArrowRightThick } from "react-icons/ti";
-import axios from "axios";
+import axios, { all } from "axios";
 import { LoaderContext } from "../context/LoaderContext";
 import { FaArrowRight } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
@@ -18,8 +18,9 @@ const truncateText = (text, limit) => {
 
 const CardContent = ({ text, val }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const limit = 25;
+  const limit = 18;
   const truncatedText = truncateText(text, limit);
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -30,7 +31,12 @@ const CardContent = ({ text, val }) => {
         </p>
       )}
 
-      <button className="card_arrow_icon arrow_btn">
+      <button
+        className="card_arrow_icon arrow_btn"
+        onClick={() => {
+          navigate(`/blog-details/${val?.id}`);
+        }}
+      >
         <p className="">
           Read more &nbsp;
           <FaArrowRight />
@@ -44,31 +50,32 @@ function Home() {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [allPostData, setAllPostData] = useState([]);
   const { setIsLoading } = useContext(LoaderContext);
+
   const [selectedOption, setSelectedOption] = useState({
     name: "",
     enteredValue: "",
     selectedCategory: "title",
   });
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const getAllPost = async () => {
+    const searchData = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/posts/all-posts`
-        );
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 1000);
-        setAllPostData(response?.data);
+        const response = await searchPosts(selectedOption);
+        console.log("Search Response:", response);
+        setAllPostData(response);
+        // setTimeout(() => {
+        //   setIsLoading(false);
+        // }, 500);
       } catch (error) {
-        console.error(error);
-        return error;
+        console.error("Error searching posts:", error);
       }
     };
-    getAllPost();
-  }, []);
+
+    if (selectedOption.enteredValue !== "") {
+      searchData();
+    }
+  }, [selectedOption, setIsLoading]); // Ensure setIsLoading is part of the dependency array if defined outside
 
   const handleSelectChange = (e) => {
     setSelectedOption({
@@ -95,6 +102,7 @@ function Home() {
     }
   }, [selectedOption]);
 
+  console.log("ALL POS", allPostData);
   return (
     <div className="home_container">
       <section className="banner_section">
@@ -207,31 +215,28 @@ function Home() {
         </div>
 
         <div className="card_container">
-          {allPostData.length > 0 &&
-            allPostData?.map((val, index) => {
+          {allPostData?.data?.length > 0 ? (
+            allPostData?.data?.map((val, index) => {
               return (
-                <div
-                  className="card"
-                  key={index}
-                  onClick={() => {
-                    navigate(`/${val?.id}`);
-                  }}
-                >
+                <div className="card" key={index}>
                   <div>
                     <img src={dummyCard} alt="" />
                   </div>
                   <h3>{val?.title}</h3>
                   <p style={{ fontSize: "1rem", color: "grey" }}>
-                    Created By: {val?.name},{" "}
-                    <span style={{ position: "absolute", right: "30px" }}>
-                      {convertDate(val?.created_at)}{" "}
-                    </span>
+                    Created By: {val?.name}, <br />
+                    <span>{convertDate(val?.created_at)} </span>
                   </p>{" "}
                   <CardContent text={val?.content} val={val} />
                   <br />
                 </div>
               );
-            })}
+            })
+          ) : (
+            <h1 style={{ textAlign: "center", margin: "0 auto" }}>
+              No Data Found!
+            </h1>
+          )}
         </div>
       </section>
     </div>
