@@ -116,7 +116,7 @@ function BlogsPage() {
 
   return (
     <div className="blog_container">
-      <div style={{ marginTop: "100px" }}>
+      <div>
         <h1 style={{ fontWeight: "500" }}>Create Your Posts</h1>
         <div className="form">
           <div className="input_container">

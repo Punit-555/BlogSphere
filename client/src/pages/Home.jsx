@@ -34,6 +34,7 @@ const CardContent = ({ text, val }) => {
       <button
         className="card_arrow_icon arrow_btn"
         onClick={() => {
+          alert("hii");
           navigate(`/blog-details/${val?.id}`);
         }}
       >
@@ -213,7 +214,6 @@ function Home() {
         <div className="card_container">
           {allPostData?.data?.length > 0 ? (
             allPostData?.data?.map((val, index) => {
-              console.log("VAL", val);
               return (
                 <div className="card" key={index}>
                   <div>
