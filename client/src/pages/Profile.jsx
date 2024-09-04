@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import { LoaderContext } from "../context/LoaderContext";
 import { fetchUpdatedUserDetails } from "../api/getApi";
 
+import userIcon from "../assets/user.png";
+
 function Profile() {
   const { userDetails, setUserDetails } = useContext(AuthContext);
   const { setIsLoading } = useContext(LoaderContext);
@@ -59,6 +61,7 @@ function Profile() {
   return (
     <div className="profile_container">
       <section className="profile_section">
+        <img src={userIcon} height={54} width={54} />
         <h3 style={{ fontWeight: "600", fontSize: "2.5rem", color: "#f2f2e" }}>
           Hii, <span>{userDetails?.name} </span>{" "}
         </h3>
