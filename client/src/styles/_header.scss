@@ -1,54 +1,132 @@
-header {
-    font-family: $bodyFont;
-    background-color: #2f2e2e;
-    padding: 20px $general-padding;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 70px;
+.header-fixed {
+    // background-color: #292c2f;
 
-    .logo {
-        font-size: 1.8rem;
-        color: white;
-        font-family: "Rubik", sans-serif;
-        font-optical-sizing: auto;
-        font-weight: 400;
-        font-style: normal;
-    }
-
-    ul {
-        list-style: none;
-        display: flex;
-        gap: 30px;
-        margin: 0;
-        padding: 0;
-
-        li {
-            a {
-                text-decoration: none;
-                color: $textColor;
-                font-weight: 300;
-                font-size: 1.2rem;
-                transition: color $transition-duration $transition-ease;
-
-                &:hover {
-                    color: #c1c8cc;
-                }
-
-                &:active {
-                    text-decoration: underline;
-                }
-
-                &.active {
-                    font-weight: bold;
-                    color: blue;
-                    text-decoration: underline;
-                }
-            }
-        }
-    }
+    box-shadow: 0 2px 3px #ccc;
+    padding: 20px 10px;
+    height: 80px;
+    color: #292c2f;
+    box-sizing: border-box;
+    width: 100%;
+    -webkit-transition: top 0.3s;
+    transition: top 0.3s;
+    position: fixed;
+    background-color: white;
 }
 
+.header-fixed .header-limiter {
+    max-width: 1300px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+
+
+.header-fixed-placeholder {
+    height: 80px;
+    display: none;
+}
+
+.header-fixed .header-limiter h1 {
+    float: left;
+    font: normal 2.4rem Cookie, Arial, Helvetica, sans-serif;
+    line-height: 40px;
+    margin: 0;
+    font-weight: 400;
+}
+
+.header-fixed .header-limiter h1 span {
+    color: #5383d3;
+}
+
+/* The navigation links */
+
+.header-fixed .header-limiter a {
+    color: #292c2f;
+    text-decoration: none;
+}
+
+.header-fixed .header-limiter nav {
+    font: 1.2rem Arial, Helvetica, sans-serif;
+    line-height: 40px;
+    float: right;
+}
+
+.header-fixed .header-limiter nav a {
+    display: inline-block;
+    padding: 0 10px;
+    text-decoration: none;
+    color: #292c2f;
+    opacity: 0.9;
+}
+
+.header-fixed .header-limiter nav a:hover {
+    opacity: 1;
+}
+
+.header-fixed .header-limiter nav a.selected {
+    color: #608bd2;
+    pointer-events: none;
+    opacity: 1;
+}
+
+/* Fixed version of the header */
+
+body.fixed .header-fixed {
+    padding: 10px 20px;
+    height: 50px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+body.fixed .header-fixed-placeholder {
+    display: block;
+}
+
+body.fixed .header-fixed .header-limiter h1 {
+    font-size: 24px;
+    line-height: 30px;
+}
+
+body.fixed .header-fixed .header-limiter nav {
+    line-height: 28px;
+    font-size: 13px;
+}
+
+
+/* Making the header responsive */
+
+@media all and (max-width: 600px) {
+
+    .header-fixed {
+        padding: 20px 0;
+        height: 75px;
+    }
+
+    .header-fixed .header-limiter h1 {
+        float: none;
+        margin: -8px 0 10px;
+        text-align: center;
+        font-size: 24px;
+        line-height: 1;
+    }
+
+    .header-fixed .header-limiter nav {
+        line-height: 1;
+        float: none;
+    }
+
+    .header-fixed .header-limiter nav a {
+        font-size: 13px;
+    }
+
+    body.fixed .header-fixed {
+        display: none;
+    }
+
+}
 
 .home_container {
     padding: 0px $general-padding;

@@ -45,38 +45,30 @@ const Header = () => {
     }
     setProfile("");
   };
+
   return (
-    <header>
-      <h1
-        className="logo"
-        onClick={() => {
-          navigate("/");
-        }}
-        style={{ cursor: "pointer" }}
-      >
-        {" "}
-        BlogSphere
-      </h1>
-      <ul>
-        <li>
-          <Link to="/">HOME</Link>
-        </li>
-        <li>
-          <Link to="/contact">CONTACT</Link>
-        </li>
-        {accessToken && (
-          <li>
-            <Link to="/blogs">BLOGS</Link>
-          </li>
-        )}
-      </ul>
-      <div className="accounts">
-        {accessToken ? (
-          <div>
+    <header class="header-fixed">
+      <div class="header-limiter">
+        <h1
+          className="logo"
+          onClick={() => {
+            navigate("/");
+          }}
+          style={{ cursor: "pointer" }}
+        >
+          {" "}
+          BlogSphere
+        </h1>
+
+        <nav className="nav_item">
+          {accessToken && <Link to="/blogs">Blogs</Link>}
+          <Link to="/">Contact</Link>
+
+          {accessToken ? (
             <select
               name="profile"
               id=""
-              className="select_field_input"
+              className="profile_select"
               onChange={handleProfileChange}
             >
               <option value="" selected disabled>
@@ -85,16 +77,65 @@ const Header = () => {
               <option value="profile">Profile</option>
               <option value="logout">Logout</option>
             </select>
-          </div>
-        ) : (
-          <button className="user_btn" onClick={openModal}>
-            Login / Register <VscAccount />
-          </button>
-        )}
+          ) : (
+            <button className="btn  btn_login" onClick={openModal}>
+              Login / Register
+            </button>
+          )}
+        </nav>
       </div>
-
       <Auth isOpen={isModalOpen} onClose={closeModal} />
     </header>
+
+    // <header>
+    //   <h1
+    //     className="logo"
+    //     onClick={() => {
+    //       navigate("/");
+    //     }}
+    //     style={{ cursor: "pointer" }}
+    //   >
+    //     {" "}
+    //     BlogSphere
+    //   </h1>
+    //   <ul>
+    //     <li>
+    //       <Link to="/">HOME</Link>
+    //     </li>
+    //     <li>
+    //       <Link to="/contact">CONTACT</Link>
+    //     </li>
+    //     {accessToken && (
+    //       <li>
+    //         <Link to="/blogs">BLOGS</Link>
+    //       </li>
+    //     )}
+    //   </ul>
+    //   <div className="accounts">
+    //     {accessToken ? (
+    //       <div>
+    //         <select
+    //           name="profile"
+    //           id=""
+    //           className="select_field_input"
+    //           onChange={handleProfileChange}
+    //         >
+    //           <option value="" selected disabled>
+    //             Hi, {userDetails?.name?.split(" ")[0]}
+    //           </option>
+    //           <option value="profile">Profile</option>
+    //           <option value="logout">Logout</option>
+    //         </select>
+    //       </div>
+    //     ) : (
+    //       <button className="user_btn" onClick={openModal}>
+    //         Login / Register <VscAccount />
+    //       </button>
+    //     )}
+    //   </div>
+
+    //
+    // </header>
   );
 };
 

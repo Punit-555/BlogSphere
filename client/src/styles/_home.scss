@@ -112,7 +112,8 @@
     min-width: 342px;
     min-height: 450px;
     max-height: 260px;
-    overflow: hidden;
+    // overflow: hidden;
+    z-index: -999999999;
 
     p {
         text-align: left;
