@@ -90,6 +90,7 @@
 label {
     color: $text-primary-color;
     font-weight: 600;
+
 }
 
 .create-btn {
@@ -106,6 +107,7 @@ label {
     border: 1px solid #eee;
     color: $primary-color;
     font-family: $bodyFont;
+    transition: all 0.3s ease-in-out;
 
     &:hover {
         border: 1px solid #2F2E2F;

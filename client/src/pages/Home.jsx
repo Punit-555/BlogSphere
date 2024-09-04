@@ -97,12 +97,11 @@ function Home() {
     }
   }, [selectedOption]);
 
-  console.log("ALL POS", allPostData);
   return (
     <div className="home_container">
       <section className="banner_section">
         <div>
-          <h1>
+          <h1 className="heading heading_h2" style={{ fontWeight: "500" }}>
             A catchy and relevant headline that captures the essence of your
             blog.
           </h1>
@@ -140,7 +139,9 @@ function Home() {
 
       <section className="blog_section">
         <div>
-          <h1 className="heading_h1">Search Here</h1>
+          <h1 className="heading_h1" style={{ fontWeight: "500" }}>
+            Search Here
+          </h1>
         </div>
 
         <div>

@@ -116,8 +116,8 @@ function BlogsPage() {
 
   return (
     <div className="blog_container">
-      <div>
-        <h1>Create Posts</h1>
+      <div style={{ marginTop: "100px" }}>
+        <h1 style={{ fontWeight: "500" }}>Create Your Posts</h1>
         <div className="form">
           <div className="input_container">
             <label htmlFor="title">Title</label>
@@ -173,7 +173,7 @@ function BlogsPage() {
       </div>
 
       <div>
-        <h1>Posts Created By You .</h1>
+        <h1 style={{ fontWeight: "500" }}>Posts Created By You .</h1>
 
         <div className="card_container">
           {createdPosts?.length > 0 &&
