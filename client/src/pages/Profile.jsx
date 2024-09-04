@@ -63,6 +63,7 @@ function Profile() {
           Hii, <span>{userDetails?.name} </span>{" "}
         </h3>
         <div className="form form_outline">
+          {/* <img src={imageUrl} alt="" /> */}
           <div className="input_container">
             <label htmlFor="">Name</label>
             <input

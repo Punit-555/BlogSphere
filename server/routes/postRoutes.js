@@ -24,7 +24,7 @@ router.post('/postByUser', authMiddleware, postController.getPostByUser);
 router.delete('/delete/:id', authMiddleware, postController.deletePost);
 
 // post details 
-router.post("/post-details", postController.searchPosts);
+router.post("/post-details/:id", postController.postDetails);
 
 
 

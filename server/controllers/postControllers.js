@@ -1,11 +1,9 @@
 // controllers/postController.js
 const db = require('../config/db');
 
-
-
 // Get all posts (available to all users)
 exports.getAllPosts = (req, res) => {
-    const sql = 'SELECT * FROM posts as p join users as u on p.user_id =  u.id  ';
+    const sql = 'SELECT * FROM posts ';
     db.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(results);
@@ -13,11 +11,9 @@ exports.getAllPosts = (req, res) => {
 };
 
 
-
 // Get a specific post by ID (available to all users)
 exports.getPostById = (req, res) => {
     const { id } = req?.params;
-    console.log("IDDDD", id);
     const firstQuery = `select * from  posts where id = ? `;
     db.query(firstQuery, [id], (err, userPosts) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -163,5 +159,34 @@ exports.searchPosts = (req, res) => {
         res.json(results);
     });
 }
+
+
+// Post Details
+
+exports.postDetails = (req, res) => {
+    const { id } = req?.params;
+
+    const query = `
+        SELECT posts.*, users.*
+        FROM posts
+        JOIN users ON posts.user_id = users.id
+        WHERE posts.id = ?
+    `;
+
+    db.query(query, [id], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: err.message });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+
+        const postDetails = results[0];
+
+        res.json({ ...postDetails, postId: id });
+    });
+};
 
 

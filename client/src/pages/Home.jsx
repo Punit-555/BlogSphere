@@ -62,20 +62,15 @@ function Home() {
       try {
         setIsLoading(true);
         const response = await searchPosts(selectedOption);
-        console.log("Search Response:", response);
         setAllPostData(response);
-        // setTimeout(() => {
-        //   setIsLoading(false);
-        // }, 500);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error searching posts:", error);
       }
     };
 
-    if (selectedOption.enteredValue !== "") {
-      searchData();
-    }
-  }, [selectedOption, setIsLoading]); // Ensure setIsLoading is part of the dependency array if defined outside
+    searchData();
+  }, [selectedOption, setIsLoading]);
 
   const handleSelectChange = (e) => {
     setSelectedOption({
@@ -217,6 +212,7 @@ function Home() {
         <div className="card_container">
           {allPostData?.data?.length > 0 ? (
             allPostData?.data?.map((val, index) => {
+              console.log("VAL", val);
               return (
                 <div className="card" key={index}>
                   <div>

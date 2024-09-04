@@ -100,8 +100,8 @@ const searchPosts = async (payload) => {
 
 const blogDetails = async (id) => {
     try {
-        const response = await axios.get(
-            `${process.env.REACT_APP_BASE_URL}/posts/postByID/${id}`,
+        const response = await axios.post(
+            `${process.env.REACT_APP_BASE_URL}/posts/post-details/${id}`,
         );
         // console.log("ABOOOOO", response);
         return response;

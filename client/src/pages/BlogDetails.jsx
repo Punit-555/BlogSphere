@@ -1,17 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { blogDetails } from "../api/postApi";
 import { convertDate } from "../utility";
 import blogImage from "../assets/dummy_card.jpg";
+import { LoaderContext } from "../context/LoaderContext";
 function BlogDetails() {
   const { id } = useParams();
   const [postDetails, setPostDetails] = useState();
+  const { setIsLoading } = useContext(LoaderContext);
 
   const fetchPostDetails = async () => {
+    setIsLoading(true);
     try {
       const response = await blogDetails(id);
       setPostDetails(response?.data);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };

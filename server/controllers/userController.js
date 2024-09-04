@@ -4,17 +4,16 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const db = require('../config/db');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+
 
 
 exports.signup = async (req, res) => {
-    const { name, email, password, phoneNumber } = req.body;
+    const { name, email, password, phoneNumber, } = req.body;
 
     try {
-        const generateRandomId = () => {
-            return Math.floor(Math.random() * 90) + 10;
-        };
+        const generateRandomId = () => Math.floor(Math.random() * 90) + 10;
 
-        // Check if email already exists
         const checkUserQuery = 'SELECT email FROM users WHERE email = ?';
         db.query(checkUserQuery, [email], async (err, results) => {
             if (err) {
@@ -26,7 +25,6 @@ exports.signup = async (req, res) => {
                 return res.status(400).json({ error: 'User already exists.' });
             }
 
-            // Generate a unique two-digit user ID
             let userId;
             let userExists = true;
             const checkUserIdQuery = 'SELECT id FROM users WHERE id = ?';
@@ -36,7 +34,6 @@ exports.signup = async (req, res) => {
                 const [userIdResults] = await db.promise().query(checkUserIdQuery, [userId]);
                 userExists = userIdResults.length > 0;
             }
-
             // Hash the user's password
             const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -44,7 +41,7 @@ exports.signup = async (req, res) => {
             const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
             // Send email to user
-            var transporter = nodemailer.createTransport({
+            const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
                     user: process.env.EMAIL_USER,
@@ -56,7 +53,7 @@ exports.signup = async (req, res) => {
             let htmlContent = fs.readFileSync(filePath, 'utf8');
             htmlContent = htmlContent.replace('{{name}}', name);
 
-            var mailOptions = {
+            const mailOptions = {
                 from: process.env.EMAIL_USER,
                 to: email,
                 subject: 'Signup Successful!',
@@ -71,17 +68,20 @@ exports.signup = async (req, res) => {
                 }
             });
 
+
+
             // Insert the new user into the database with the unique two-digit user ID
             const query = 'INSERT INTO users (id, name, email, password, phoneNumber, token) VALUES (?, ?, ?, ?, ?, ?)';
+
 
             db.query(query, [userId, name, email, hashedPassword, phoneNumber, token], (err, result) => {
                 if (err) {
                     console.error('Error inserting user:', err);
-                    return res.status(500).json({ error: 'Failed to register user' });
+                    return res.status(500).json({ error: 'Failed to register user', details: err.message });
                 }
-
-                res.status(201).json({ message: 'User registered successfully', userId, token });
+                res.status(201).json({ message: 'User registered successfully', userId, token, result });
             });
+
 
         });
 
@@ -114,7 +114,7 @@ exports.login = (req, res) => {
                 return res.status(400).json({ error: 'Invalid email or password' });
             }
 
-            delete user.password;  // Exclude the password from user details
+            delete user.password;
 
             const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
 
