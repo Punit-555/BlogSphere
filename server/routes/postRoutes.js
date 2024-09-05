@@ -27,5 +27,10 @@ router.delete('/delete/:id', authMiddleware, postController.deletePost);
 router.post("/post-details/:id", postController.postDetails);
 
 
+// Update Post 
+
+router.post("/update-post")
+
+
 
 module.exports = router;

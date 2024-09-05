@@ -13,6 +13,7 @@ import Profile from "./pages/Profile";
 import { AuthContext } from "./context/userAuth";
 import { getSpecificUserDetails } from "./api/getApi";
 import BlogDetails from "./pages/BlogDetails";
+import ContactUs from "./pages/ContactUs";
 function App() {
   const { isLoading, setIsLoading } = useContext(LoaderContext);
   const { setUserDetails } = useContext(AuthContext);
@@ -65,6 +66,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/blogs" element={<BlogsPage />} />
         <Route path="/blog-details/:id" element={<BlogDetails />} />
+        <Route path="/contact" element={<ContactUs />} />
       </Routes>
       <Footer />
       <ToastContainer />

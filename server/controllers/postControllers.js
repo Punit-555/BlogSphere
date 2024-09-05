@@ -171,6 +171,10 @@ exports.searchPosts = (req, res) => {
 };
 
 
+exports.updateBlogDetails = (req, res) => {
+    
+}
+
 
 // Post Details
 
