@@ -1,77 +1,27 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import bannerImage from "../assets/banner-img.jpg";
 import { TiArrowRightThick } from "react-icons/ti";
-import axios, { all } from "axios";
-import { LoaderContext } from "../context/LoaderContext";
-import { FaArrowRight } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
 import { IoSearch } from "react-icons/io5";
 import { searchPosts } from "../api/postApi";
 import { convertDate } from "../utility";
 import dummyCard from "../assets/dummy_card.jpg";
-
-const truncateText = (text, limit) => {
-  const words = text.split(" ");
-  if (words.length <= limit) return text;
-  return words.slice(0, limit).join(" ") + "...";
-};
-
-const CardContent = ({ text, val }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const limit = 18;
-  const truncatedText = truncateText(text, limit);
-  const navigate = useNavigate();
-
-  return (
-    <div>
-      <p>{isExpanded ? text : truncatedText}</p>
-      {text.split(" ").length > limit && (
-        <p onClick={() => setIsExpanded(!isExpanded)}>
-          {isExpanded ? "Show Less" : "Continue reading..."}
-        </p>
-      )}
-
-      <button
-        className="card_arrow_icon arrow_btn"
-        onClick={() => {
-          alert("hii");
-          navigate(`/blog-details/${val?.id}`);
-        }}
-      >
-        <p className="">
-          Read more &nbsp;
-          <FaArrowRight />
-        </p>
-      </button>
-    </div>
-  );
-};
+import CardContent from "../components/CardContent";
+import { allPosts } from "../api/getApi";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function Home() {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [allPostData, setAllPostData] = useState([]);
-  const { setIsLoading } = useContext(LoaderContext);
+  const [isSkeletonLoader, setIsSkeletonLoader] = useState(true);
+  const [isDataLoader, setIsDataLoader] = useState(true);
+  // const { setIsLoading: setGlobalLoading } = useContext(LoaderContext);
 
   const [selectedOption, setSelectedOption] = useState({
     name: "",
     enteredValue: "",
     selectedCategory: "title",
   });
-
-  useEffect(() => {
-    const searchData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await searchPosts(selectedOption);
-        setAllPostData(response);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error searching posts:", error);
-      }
-    };
-
-    searchData();
-  }, [selectedOption, setIsLoading]);
 
   const handleSelectChange = (e) => {
     setSelectedOption({
@@ -83,58 +33,89 @@ function Home() {
   useEffect(() => {
     const searchData = async () => {
       try {
-        setIsLoading(true);
+        setIsSkeletonLoader(true);
         const response = await searchPosts(selectedOption);
         setAllPostData(response);
         setTimeout(() => {
-          setIsLoading(false);
-        }, 1000);
+          setIsSkeletonLoader(false);
+        }, 1500);
       } catch (error) {
-        console.log(error);
+        setTimeout(() => {
+          setIsSkeletonLoader(false);
+        }, 1500);
       }
     };
-    if (selectedOption?.enteredValue !== "") {
+    const getAllPosts = async () => {
+      try {
+        setIsSkeletonLoader(true);
+        const response = await allPosts();
+        setAllPostData(response);
+        setTimeout(() => {
+          setIsSkeletonLoader(false);
+        }, 1500);
+      } catch (error) {
+        console.log(error);
+        setTimeout(() => {
+          setIsSkeletonLoader(false);
+        }, 1500);
+      }
+    };
+
+    if (selectedOption.enteredValue === "") {
+      getAllPosts();
+    } else {
       searchData();
     }
   }, [selectedOption]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setIsDataLoader(false);
+    }, 1000);
+  }, []);
+
   return (
-    <div className="home_container  ">
-      <section className="banner_section fade-in-down ">
+    <div className="home_container">
+      <section className="banner_section fade-in-down">
         <div>
-          <h1 className="heading heading_h2" style={{ fontWeight: "500" }}>
-            A catchy and relevant headline that captures the essence of your
-            blog.
-          </h1>
-          <p>
-            A brief, engaging description or tagline that adds context to the
-            heading.
-          </p>
+          {isDataLoader ? (
+            <Skeleton height={100} width={600} />
+          ) : (
+            <>
+              <h1 className="heading heading_h2" style={{ fontWeight: "500" }}>
+                A catchy and relevant headline that captures the essence of your
+                blog.
+              </h1>
+            </>
+          )}
+
+          {isDataLoader ? (
+            <Skeleton height={60} width={400} style={{ margin: "20px 0px" }} />
+          ) : (
+            <p>
+              A brief, engaging description or tagline that adds context to the
+              heading.
+            </p>
+          )}
+
           <button className="readMore">
             Read More <TiArrowRightThick className="readmoreIcon" />
           </button>
         </div>
 
         <div>
-          {!imageLoaded && (
-            <div className="image-placeholder">
-              <img
-                className="banner_image"
-                src={bannerImage}
-                alt="Banner"
-                onLoad={() => setImageLoaded(true)}
-                style={{ display: imageLoaded ? "block" : "none" }}
-                onError={bannerImage}
-              />
-            </div>
+          {isDataLoader ? (
+            <Skeleton height={400} width={700} />
+          ) : (
+            <img
+              className="banner_image"
+              src={bannerImage}
+              alt="Banner"
+              onLoad={() => setImageLoaded(true)}
+              style={{ display: imageLoaded ? "block" : "none" }}
+              onError={bannerImage}
+            />
           )}
-          <img
-            className="banner_image"
-            src={bannerImage}
-            alt="Banner"
-            onLoad={() => setImageLoaded(true)}
-            style={{ display: imageLoaded ? "block" : "none" }}
-          />
         </div>
       </section>
 
@@ -145,13 +126,12 @@ function Home() {
               <label htmlFor="Select">Search By</label>
               <br />
               <select
-                className="form_select "
-                onChange={(e) => {
-                  handleSelectChange(e, "CAT");
-                }}
+                defaultValue={""}
+                className="form_select"
+                onChange={(e) => handleSelectChange(e, "CAT")}
               >
                 <option value="title">Title</option>
-                <option value="category">Category</option>{" "}
+                <option value="category">Category</option>
                 <option value="createdAt">Created At</option>
               </select>
             </div>
@@ -161,7 +141,8 @@ function Home() {
                 <label htmlFor="select">Select Category</label>
                 <br />
                 <select
-                  className="  cat_select"
+                  defaultValue={""}
+                  className="cat_select"
                   onChange={(e) =>
                     setSelectedOption({
                       ...selectedOption,
@@ -208,25 +189,33 @@ function Home() {
           </div>
         </div>
 
-        <div className="card_container fade-in-down ">
-          {allPostData?.data?.length > 0 ? (
-            allPostData?.data?.map((val, index) => {
-              console.log("VAL", val);
-              return (
-                <div className="card  fade-in-down  " key={index}>
-                  <div>
-                    <img src={dummyCard} alt="" />
-                  </div>
-                  <h3>{val?.title}</h3>
-                  <p style={{ fontSize: "1rem", color: "grey" }}>
-                    Created By: {val?.name}, <br />
-                    <span>{convertDate(val?.created_at)} </span>
-                  </p>{" "}
-                  <CardContent text={val?.content} val={val} />
-                  <br />
+        <div className="card_container fade-in-down">
+          {isSkeletonLoader ? (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+              {[...Array(10)].map((_, index) => (
+                <div className="card fade-in-down " key={index}>
+                  <Skeleton height={200} />
+                  <Skeleton height={30} width="50%" />
+                  <Skeleton height={20} width="70%" />
+                  <Skeleton count={3} />
                 </div>
-              );
-            })
+              ))}
+            </div>
+          ) : allPostData?.data?.length > 0 ? (
+            allPostData?.data?.map((val, index) => (
+              <div className="card fade-in-down" key={index}>
+                <div>
+                  <img src={dummyCard} alt="" />
+                </div>
+                <h3>{val?.title}</h3>
+                <p style={{ fontSize: "1rem", color: "grey" }}>
+                  Created By: {val?.name}, <br />
+                  <span>{convertDate(val?.created_at)} </span>
+                </p>
+                <CardContent text={val?.content} val={val} />
+                <br />
+              </div>
+            ))
           ) : (
             <h1 style={{ textAlign: "center", margin: "0 auto" }}>
               No Data Found!

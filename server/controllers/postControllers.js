@@ -6,7 +6,10 @@ exports.getAllPosts = (req, res) => {
     const sql = 'SELECT * FROM posts ';
     db.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
-        res.json(results);
+        const data = {
+            data: results
+        }
+        res.json(data);
     });
 };
 
@@ -127,33 +130,35 @@ exports.deletePost = (req, res) => {
 };
 
 
-
 exports.searchPosts = (req, res) => {
     const { searchType, searchValue } = req.body;
 
     // Base query to select posts and join with user details
     let query = `
-      SELECT posts.*, users.name, users.email 
-      FROM posts 
-      JOIN users ON posts.user_id = users.id 
-      WHERE
+      SELECT * from  posts 
+     
     `;
     let queryParams = [];
+    let conditions = [];
 
-    if (searchType === 'title') {
-        query += ' (posts.title = ? OR posts.title LIKE ? OR LOWER(posts.title) LIKE ?)';
-        queryParams = [searchValue, `%${searchValue}%`, `%${searchValue.toLowerCase()}%`];
-    } else if (searchType === 'category') {
-        query += ' posts.category = ?';
-        queryParams = [searchValue];
-    } else if (searchType === 'createdAt') {
-        query += ' posts.created_at = ?';
-        queryParams = [searchValue];
-    } else {
-        return res.status(400).json({ error: 'Invalid search type' });
+    if (searchValue) {
+        if (searchType === 'title') {
+            conditions.push('LOWER(posts.title) LIKE ?');
+            queryParams.push(`%${searchValue.toLowerCase()}%`);
+        } else if (searchType === 'category') {
+            conditions.push('posts.category = ?');
+            queryParams.push(searchValue);
+        } else if (searchType === 'createdAt') {
+            conditions.push('posts.created_at = ?');
+            queryParams.push(searchValue);
+        }
     }
 
-    // Execute the query with the provided parameters
+    if (conditions.length > 0) {
+        query += ' WHERE ' + conditions.join(' AND ');
+    }
+
+
     db.query(query, queryParams, (err, results) => {
         if (err) {
             console.error('Error executing query:', err);

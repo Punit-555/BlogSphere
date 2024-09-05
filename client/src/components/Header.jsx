@@ -46,8 +46,8 @@ const Header = () => {
   };
 
   return (
-    <header class="header-fixed">
-      <div class="header-limiter">
+    <header className="header-fixed">
+      <div className="header-limiter">
         <h1
           className="logo"
           onClick={() => {
@@ -61,7 +61,7 @@ const Header = () => {
 
         <nav className="nav_item">
           {accessToken && <Link to="/blogs">Blogs</Link>}
-          <Link to="/">Contact</Link>
+          <Link to="/contact">Contact</Link>
 
           {accessToken ? (
             <select
@@ -69,6 +69,7 @@ const Header = () => {
               id=""
               className="profile_select"
               onChange={handleProfileChange}
+              defaultValue={""}
             >
               <option value="" selected disabled>
                 Hi, {userDetails?.name?.split(" ")[0]}

@@ -59,7 +59,7 @@ function App() {
   return (
     <div className="p-4" ref={ref}>
       <Header />
-      {isLoading && <LoaderComponent />}
+      {/* {isLoading && <LoaderComponent />} */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
