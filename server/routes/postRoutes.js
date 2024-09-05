@@ -17,8 +17,6 @@ router.post('/search-posts', postController.searchPosts);
 // Find Posts by User 
 router.post('/postByUser', authMiddleware, postController.getPostByUser);
 
-// update Posts 
-// router.put('/posts/:id', authMiddleware, postController.updatePost);
 
 // delete Posts 
 router.delete('/delete/:id', authMiddleware, postController.deletePost);
@@ -28,8 +26,7 @@ router.post("/post-details/:id", postController.postDetails);
 
 
 // Update Post 
-
-router.post("/update-post")
+router.put("/update/:id", authMiddleware, postController.updatePost);
 
 
 

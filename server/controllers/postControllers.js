@@ -107,14 +107,20 @@ exports.createPost = (req, res) => {
 // Update a post (only the user who created it)
 exports.updatePost = (req, res) => {
     const { id } = req.params;
-    const { title, content } = req.body;
+    const { title, content, category } = req.body;
     const userId = req.user.userId;
 
-    const sql = 'UPDATE posts SET title = ?, content = ? WHERE id = ? AND user_id = ?';
-    db.query(sql, [title, content, id, userId], (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
-        if (results.affectedRows === 0) return res.status(404).json({ message: 'Post not found !' });
-        res.json({ message: 'Post updated' });
+
+    const sql = `UPDATE posts SET title = ?, content = ?, category = ? WHERE id = ? AND user_id = ?`;
+
+    db.query(sql, [title, content, category, id, userId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ message: 'Post not found or you do not have permission to update it!' });  // Handle case when post is not found or user is unauthorized
+        }
+        res.json({ message: 'Post updated successfully' });
     });
 };
 
@@ -170,10 +176,6 @@ exports.searchPosts = (req, res) => {
     });
 };
 
-
-exports.updateBlogDetails = (req, res) => {
-    
-}
 
 
 // Post Details

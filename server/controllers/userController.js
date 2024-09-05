@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const db = require('../config/db');
 const jwt = require('jsonwebtoken');
-const multer = require('multer');
 
 
 
@@ -212,7 +211,6 @@ exports.deleteUser = (req, res) => {
 exports.updateUser = async (req, res) => {
     const { name, email } = req.body;
     const { id } = req.params;
-    console.log("ID", id, name, email);
     // Validate user ID
     if (!id) {
         return res.status(400).json({ message: 'User ID is required.' });

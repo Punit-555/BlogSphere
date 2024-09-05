@@ -223,31 +223,22 @@
 
 .deleteButton {
     position: absolute;
-    /* Positioning the button */
     top: 10px;
-    /* Distance from the top of the card */
     right: 10px;
-    /* Distance from the right side of the card */
     background-color: transparent;
-    /* No background */
     border: none;
-    /* No border */
     font-size: 20px;
-    /* Icon size */
     cursor: pointer;
-    /* Pointer cursor on hover */
-    color: red;
-    /* Icon color */
+    color: #2F2E2E;
 }
 
 .deleteButton:hover {
-    color: darkred;
+    color: #2F2E2E;
 }
 
 .profile_container {
     padding: 0px $general-padding;
     display: flex;
-    // height: calc(100vh - 200px);
 
 
     .profile_section {

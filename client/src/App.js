@@ -18,7 +18,6 @@ function App() {
   const { isLoading, setIsLoading } = useContext(LoaderContext);
   const { setUserDetails } = useContext(AuthContext);
   const userData = JSON.parse(localStorage.getItem("user_details"));
-  const fadeInRef = useRef(null);
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {
@@ -60,7 +59,7 @@ function App() {
   return (
     <div className="p-4" ref={ref}>
       <Header />
-      {/* {isLoading && <LoaderComponent />} */}
+      {isLoading && <LoaderComponent />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />

@@ -16,12 +16,7 @@ function ContactUs() {
           </div>
           <div className="about_form_input_container">
             <label htmlFor="">Message</label>
-            <textarea
-              type="text"
-              className="about_form_input_field"
-              rows="5"
-              cols={2}
-            />
+            <textarea type="text" className="about_form_input_field" />
           </div>
           <div className="about_form_input_container">
             <button className="about_form_input_container_btn">Submit</button>
