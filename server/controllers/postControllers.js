@@ -129,36 +129,42 @@ exports.deletePost = (req, res) => {
 
 
 exports.searchPosts = (req, res) => {
-
-
     const { searchType, searchValue } = req.body;
 
-    let query = 'SELECT * FROM posts WHERE';
+    // Base query to select posts and join with user details
+    let query = `
+      SELECT posts.*, users.name, users.email 
+      FROM posts 
+      JOIN users ON posts.user_id = users.id 
+      WHERE
+    `;
     let queryParams = [];
 
     if (searchType === 'title') {
-        query += ' title = ? OR title LIKE ? OR LOWER(title) LIKE ?';
+        query += ' (posts.title = ? OR posts.title LIKE ? OR LOWER(posts.title) LIKE ?)';
         queryParams = [searchValue, `%${searchValue}%`, `%${searchValue.toLowerCase()}%`];
     } else if (searchType === 'category') {
-        query += ' category = ?';
+        query += ' posts.category = ?';
         queryParams = [searchValue];
     } else if (searchType === 'createdAt') {
-        query += ' created_at = ?';
+        query += ' posts.created_at = ?';
         queryParams = [searchValue];
     } else {
         return res.status(400).json({ error: 'Invalid search type' });
     }
 
+    // Execute the query with the provided parameters
     db.query(query, queryParams, (err, results) => {
         if (err) {
             console.error('Error executing query:', err);
             return res.status(500).json({ error: 'Database query failed' });
         }
 
-        console.log("RESULTS", results);
+        // Return the results (posts with user details)
         res.json(results);
     });
-}
+};
+
 
 
 // Post Details

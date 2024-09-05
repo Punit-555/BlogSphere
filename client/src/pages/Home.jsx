@@ -88,7 +88,7 @@ function Home() {
         setAllPostData(response);
         setTimeout(() => {
           setIsLoading(false);
-        }, 500);
+        }, 1000);
       } catch (error) {
         console.log(error);
       }
@@ -99,8 +99,8 @@ function Home() {
   }, [selectedOption]);
 
   return (
-    <div className="home_container">
-      <section className="banner_section">
+    <div className="home_container  ">
+      <section className="banner_section fade-in-down ">
         <div>
           <h1 className="heading heading_h2" style={{ fontWeight: "500" }}>
             A catchy and relevant headline that captures the essence of your
@@ -140,17 +140,12 @@ function Home() {
 
       <section className="blog_section">
         <div>
-          <h1 className="heading_h1" style={{ fontWeight: "500" }}>
-            Search Here
-          </h1>
-        </div>
-
-        <div>
           <div className="search_container">
             <div className="input_container">
               <label htmlFor="Select">Search By</label>
+              <br />
               <select
-                className="form_select"
+                className="form_select "
                 onChange={(e) => {
                   handleSelectChange(e, "CAT");
                 }}
@@ -164,8 +159,9 @@ function Home() {
             {selectedOption.selectedCategory === "category" ? (
               <div className="input_container">
                 <label htmlFor="select">Select Category</label>
+                <br />
                 <select
-                  className="form_select"
+                  className="  cat_select"
                   onChange={(e) =>
                     setSelectedOption({
                       ...selectedOption,
@@ -192,6 +188,7 @@ function Home() {
                   type="text"
                   className="input_field"
                   name="enteredValue"
+                  placeholder="type here.."
                   onChange={(e) => {
                     setSelectedOption({
                       ...selectedOption,
@@ -211,11 +208,12 @@ function Home() {
           </div>
         </div>
 
-        <div className="card_container">
+        <div className="card_container fade-in-down ">
           {allPostData?.data?.length > 0 ? (
             allPostData?.data?.map((val, index) => {
+              console.log("VAL", val);
               return (
-                <div className="card" key={index}>
+                <div className="card  fade-in-down  " key={index}>
                   <div>
                     <img src={dummyCard} alt="" />
                   </div>

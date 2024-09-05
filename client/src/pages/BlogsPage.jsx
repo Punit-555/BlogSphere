@@ -89,7 +89,7 @@ function BlogsPage() {
       setCreatedPosts(response);
       setTimeout(() => {
         setIsLoading(false);
-      }, 1500);
+      }, 1000);
     } catch (error) {}
   };
   useEffect(() => {
@@ -116,7 +116,7 @@ function BlogsPage() {
 
   return (
     <div className="blog_container">
-      <div>
+      <div className="blog_container_div fade-in-down ">
         <h1 style={{ fontWeight: "500" }}>Create Your Posts</h1>
         <div className="form">
           <div className="input_container">

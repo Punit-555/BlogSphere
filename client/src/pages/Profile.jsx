@@ -35,7 +35,6 @@ function Profile() {
     try {
       setIsLoading(true);
       const res = await updateUser(payload);
-      console.log("REEE", res);
       setTimeout(() => {
         setIsLoading(false);
       }, 1000);
@@ -60,13 +59,22 @@ function Profile() {
 
   return (
     <div className="profile_container">
-      <section className="profile_section">
-        <img src={userIcon} height={54} width={54} />
-        <h3 style={{ fontWeight: "600", fontSize: "2.5rem", color: "#f2f2e" }}>
+      <section className="profile_section fade-in-down ">
+        <h3
+          className="heading_h2"
+          style={{
+            fontWeight: "600",
+            fontSize: "1.8rem",
+            color: "#f2f2e",
+            display: "flex",
+            alignItems: "center",
+            gap: "15px",
+          }}
+        >
+          <img src={userIcon} height={54} width={54} alt="" />
           Hii, <span>{userDetails?.name} </span>{" "}
         </h3>
         <div className="form form_outline">
-          {/* <img src={imageUrl} alt="" /> */}
           <div className="input_container">
             <label htmlFor="">Name</label>
             <input

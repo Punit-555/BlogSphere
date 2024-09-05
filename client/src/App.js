@@ -3,7 +3,7 @@ import Header from "./components/Header";
 import Home from "./pages/Home";
 import "./styles/main.scss";
 import Footer from "./components/Footer";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { LoaderContext } from "./context/LoaderContext";
 import LoaderComponent from "./components/LoaderComponent";
 import { ToastContainer } from 'react-toastify';
@@ -17,11 +17,12 @@ function App() {
   const { isLoading, setIsLoading } = useContext(LoaderContext);
   const { setUserDetails } = useContext(AuthContext);
   const userData = JSON.parse(localStorage.getItem("user_details"));
+  const fadeInRef = useRef(null);
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, 1000);
 
 
   }, [setIsLoading]);
@@ -30,7 +31,7 @@ function App() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, 1000);
     const fetchUpdatedUserDetails = async () => {
       if (!userData?.id) {
         setIsLoading(false);
@@ -47,9 +48,16 @@ function App() {
     fetchUpdatedUserDetails();
   }, [setIsLoading, setUserDetails]);
 
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollTop = 0;
+    }
+  }, []);
 
   return (
-    <div className="p-4">
+    <div className="p-4" ref={ref}>
       <Header />
       {isLoading && <LoaderComponent />}
       <Routes>
