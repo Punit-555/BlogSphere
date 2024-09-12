@@ -79,7 +79,7 @@ function Home() {
       <section className="banner_section fade-in-down">
         <div>
           {isDataLoader ? (
-            <Skeleton height={100} width={600} />
+            <Skeleton height={100} width={600}  style={{zIndex:"-2"}} />
           ) : (
             <>
               <h1 className="heading heading_h2" style={{ fontWeight: "500" }}>
@@ -90,7 +90,7 @@ function Home() {
           )}
 
           {isDataLoader ? (
-            <Skeleton height={60} width={400} style={{ margin: "20px 0px" }} />
+            <Skeleton height={60} width={400} style={{ margin: "20px 0px", zIndex:"-2" }} />
           ) : (
             <p>
               A brief, engaging description or tagline that adds context to the
@@ -105,7 +105,7 @@ function Home() {
 
         <div>
           {isDataLoader ? (
-            <Skeleton height={400} width={700} />
+            <Skeleton height={400} width={700}style={{zIndex:"-2"}} />
           ) : (
             <img
               className="banner_image"
@@ -194,9 +194,9 @@ function Home() {
             <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
               {[...Array(10)].map((_, index) => (
                 <div className="card fade-in-down " key={index}>
-                  <Skeleton height={200} />
-                  <Skeleton height={30} width="50%" />
-                  <Skeleton height={20} width="70%" />
+                  <Skeleton height={200}style={{zIndex:"-2"}} />
+                  <Skeleton height={30} width="50%"style={{zIndex:"-2"}} />
+                  <Skeleton height={20} width="70%"style={{zIndex:"-2"}} />
                   <Skeleton count={3} />
                 </div>
               ))}

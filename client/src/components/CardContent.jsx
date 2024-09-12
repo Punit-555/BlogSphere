@@ -16,10 +16,11 @@ const CardContent = ({ text, val }) => {
   return (
     <div>
       <button
+      style={{cursor:"pointer"}}
         className="card_arrow_icon arrow_btn"
         onClick={() => {
-          console.log("skdjfbjsdfbjahvb");
-          navigate(`/blog-details/${val?.id}`);
+         alert("skdjfbjsdfbjahvb");
+          // navigate(`/blog-details/${val?.id}`);
         }}
       >
         Read more &nbsp;

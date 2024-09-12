@@ -18,6 +18,7 @@ function App() {
   const { isLoading, setIsLoading } = useContext(LoaderContext);
   const { setUserDetails } = useContext(AuthContext);
   const userData = JSON.parse(localStorage.getItem("user_details"));
+  
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {

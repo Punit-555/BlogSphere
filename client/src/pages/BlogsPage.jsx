@@ -132,6 +132,7 @@ function BlogsPage() {
       return;
     }
   };
+  
   return (
     <div className="blog_container">
       <div className="blog_container_div fade-in-down ">

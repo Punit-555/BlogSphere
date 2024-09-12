@@ -6,7 +6,7 @@ import { LoaderContext } from "../context/LoaderContext";
 import { AuthContext } from "../context/userAuth";
 
 const Header = () => {
-  const [isModalOpen, setModalOpen] = useState(true);
+  const [isModalOpen, setModalOpen] = useState(false);
   const [profile, setProfile] = useState();
   const { userDetails } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -86,56 +86,6 @@ const Header = () => {
       </div>
       <Auth isOpen={isModalOpen} onClose={closeModal} />
     </header>
-
-    // <header>
-    //   <h1
-    //     className="logo"
-    //     onClick={() => {
-    //       navigate("/");
-    //     }}
-    //     style={{ cursor: "pointer" }}
-    //   >
-    //     {" "}
-    //     BlogSphere
-    //   </h1>
-    //   <ul>
-    //     <li>
-    //       <Link to="/">HOME</Link>
-    //     </li>
-    //     <li>
-    //       <Link to="/contact">CONTACT</Link>
-    //     </li>
-    //     {accessToken && (
-    //       <li>
-    //         <Link to="/blogs">BLOGS</Link>
-    //       </li>
-    //     )}
-    //   </ul>
-    //   <div className="accounts">
-    //     {accessToken ? (
-    //       <div>
-    //         <select
-    //           name="profile"
-    //           id=""
-    //           className="select_field_input"
-    //           onChange={handleProfileChange}
-    //         >
-    //           <option value="" selected disabled>
-    //             Hi, {userDetails?.name?.split(" ")[0]}
-    //           </option>
-    //           <option value="profile">Profile</option>
-    //           <option value="logout">Logout</option>
-    //         </select>
-    //       </div>
-    //     ) : (
-    //       <button className="user_btn" onClick={openModal}>
-    //         Login / Register <VscAccount />
-    //       </button>
-    //     )}
-    //   </div>
-
-    //
-    // </header>
   );
 };
 
