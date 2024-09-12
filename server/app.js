@@ -14,6 +14,8 @@ app.use(cors());
 app.use('/', userRoutes);
 app.use('/posts', postRoutes);
 
+app.use("/post/likes&comment", postRoutes)
+
 
 
 app.listen(PORT, () => {

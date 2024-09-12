@@ -29,5 +29,17 @@ router.post("/post-details/:id", postController.postDetails);
 router.put("/update/:id", authMiddleware, postController.updatePost);
 
 
+// likse  a post 
+router.post("/like", authMiddleware, postController.likePost);
+// get Total Liks on the Post 
+router.get("/likes/:post_id", authMiddleware, postController.totalLikePost);
+// add Comments 
+router.post("/comment", authMiddleware, postController.commentPost);
+// all Comments
+router.post("/comments/:post_id", authMiddleware, postController.allComments);
+
+
+
+
 
 module.exports = router;

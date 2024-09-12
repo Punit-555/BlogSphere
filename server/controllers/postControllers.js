@@ -177,6 +177,61 @@ exports.searchPosts = (req, res) => {
 };
 
 
+exports.likePost = (req, res) => {
+    const { user_id, post_id } = req.body;
+
+    // Insert or update the like in the likes table
+    const query = 'INSERT INTO likes (user_id, post_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE created_at = NOW()';
+    db.query(query, [user_id, post_id], (err, result) => {
+        if (err) return res.status(500).send(err);
+
+        // Increment the total_likes count in the posts table
+        const updateLikesQuery = 'UPDATE posts SET total_likes = total_likes + 1 WHERE id = ?';
+        db.query(updateLikesQuery, [post_id], (err, updateResult) => {
+            if (err) return res.status(500).send(err);
+            res.send('Post liked successfully and total_likes updated');
+        });
+    });
+}
+
+exports.totalLikePost = (req, res) => {
+    const { post_id } = req.params;
+
+    const query = 'SELECT COUNT(*) AS total_likes FROM likes WHERE post_id = ?';
+    db.query(query, [post_id], (err, result) => {
+        if (err) return res.status(500).send(err);
+        res.json(result[0]);
+    });
+}
+
+exports.commentPost = (req, res) => {
+    const { user_id, post_id, content } = req.body;
+
+    const query = 'INSERT INTO comments (user_id, post_id, content) VALUES (?, ?, ?)';
+    db.query(query, [user_id, post_id, content], (err, result) => {
+        if (err) return res.status(500).send(err);
+        res.send('Comment added successfully');
+    });
+}
+
+
+exports.allComments = (req, res) => {
+    const { post_id } = req.params;
+
+    const query = `
+      SELECT c.id, c.content, c.created_at, u.name AS username
+      FROM comments c
+      JOIN users u ON c.user_id = u.id
+      WHERE post_id = ?
+      ORDER BY c.created_at DESC
+    `;
+    db.query(query, [post_id], (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.json(results);
+    });
+}
+
+
 
 // Post Details
 

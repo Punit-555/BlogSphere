@@ -136,21 +136,19 @@
 }
 
 .card {
-    position: relative;
     border-radius: 4px;
     background: #fff;
     border: 1.9px solid #eee;
     transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12),
         .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12),
         .3s padding-left;
-    padding: 14px 36px 18px 36px;
+    padding: 15px 16px 16px 16px;
     cursor: pointer;
-    max-width: 300px;
+    max-width: 380px;
     min-width: 342px;
     min-height: 450px;
     max-height: 260px;
-    // overflow: hidden;
-    z-index: -999999999;
+    z-index: auto;
 
     p {
         text-align: left;
@@ -162,18 +160,22 @@
     // transform: translateX(10px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
     // padding-left: 46px;
+    transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12),
+        .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12),
+        .3s padding-left;
 }
 
 .card h3 {
     font-weight: 600;
 }
 
-.card img {
+.card_img {
     //position: absolute;
     top: 20px;
     right: 15px;
     max-height: 220px;
-    width: 350px;
+    width: 100%;
+    // max-width: 350px;
     border-radius: 4px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -483,3 +485,19 @@
         }
     }
 }
+
+
+.like_icon {
+    cursor: pointer;
+    transition: transform 0.3s, fill 0.3s;
+  }
+  
+  .like_icon:hover {
+    transform: scale(1.2);
+    fill: red;
+  }
+  
+  .like_icon.liked {
+    fill: red;
+  }
+  

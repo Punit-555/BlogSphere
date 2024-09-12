@@ -10,7 +10,9 @@ import { FiEdit } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import DeleteMessage from "../components/DeleteMessage";
 
+
 function BlogsPage() {
+
   const [editModal, setEditModal] = useState(false);
   const { setIsLoading } = useContext(LoaderContext);
   const { userDetails } = useContext(AuthContext);
@@ -132,7 +134,7 @@ function BlogsPage() {
       return;
     }
   };
-  
+
   return (
     <div className="blog_container">
       <div className="blog_container_div fade-in-down ">

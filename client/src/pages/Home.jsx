@@ -9,7 +9,8 @@ import CardContent from "../components/CardContent";
 import { allPosts } from "../api/getApi";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-
+import { useNavigate } from "react-router-dom";
+import BlogCard from "../components/BlogCard";
 function Home() {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [allPostData, setAllPostData] = useState([]);
@@ -79,7 +80,7 @@ function Home() {
       <section className="banner_section fade-in-down">
         <div>
           {isDataLoader ? (
-            <Skeleton height={100} width={600}  style={{zIndex:"-2"}} />
+            <Skeleton height={100} width={600} style={{ zIndex: "-2" }} />
           ) : (
             <>
               <h1 className="heading heading_h2" style={{ fontWeight: "500" }}>
@@ -90,7 +91,11 @@ function Home() {
           )}
 
           {isDataLoader ? (
-            <Skeleton height={60} width={400} style={{ margin: "20px 0px", zIndex:"-2" }} />
+            <Skeleton
+              height={60}
+              width={400}
+              style={{ margin: "20px 0px", zIndex: "-2" }}
+            />
           ) : (
             <p>
               A brief, engaging description or tagline that adds context to the
@@ -105,7 +110,7 @@ function Home() {
 
         <div>
           {isDataLoader ? (
-            <Skeleton height={400} width={700}style={{zIndex:"-2"}} />
+            <Skeleton height={400} width={700} style={{ zIndex: "-2" }} />
           ) : (
             <img
               className="banner_image"
@@ -190,37 +195,10 @@ function Home() {
         </div>
 
         <div className="card_container fade-in-down">
-          {isSkeletonLoader ? (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-              {[...Array(10)].map((_, index) => (
-                <div className="card fade-in-down " key={index}>
-                  <Skeleton height={200}style={{zIndex:"-2"}} />
-                  <Skeleton height={30} width="50%"style={{zIndex:"-2"}} />
-                  <Skeleton height={20} width="70%"style={{zIndex:"-2"}} />
-                  <Skeleton count={3} />
-                </div>
-              ))}
-            </div>
-          ) : allPostData?.data?.length > 0 ? (
-            allPostData?.data?.map((val, index) => (
-              <div className="card fade-in-down" key={index}>
-                <div>
-                  <img src={dummyCard} alt="" />
-                </div>
-                <h3>{val?.title}</h3>
-                <p style={{ fontSize: "1rem", color: "grey" }}>
-                  Created By: {val?.name}, <br />
-                  <span>{convertDate(val?.created_at)} </span>
-                </p>
-                <CardContent text={val?.content} val={val} />
-                <br />
-              </div>
-            ))
-          ) : (
-            <h1 style={{ textAlign: "center", margin: "0 auto" }}>
-              No Data Found!
-            </h1>
-          )}
+          <BlogCard
+            isSkeletonLoaderm={isSkeletonLoader}
+            allPostData={allPostData}
+          />
         </div>
       </section>
     </div>

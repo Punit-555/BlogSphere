@@ -82,3 +82,11 @@ body {
 .skeleton{
     z-index: -2;
 }
+
+
+.flexbox{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 40px;
+}

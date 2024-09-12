@@ -9,34 +9,13 @@ const CardContent = ({ text, val }) => {
     return words.slice(0, limit).join(" ") + "...";
   };
   const [isExpanded, setIsExpanded] = useState(false);
-  const limit = 18;
+  const limit = 20;
   const truncatedText = truncateText(text, limit);
   const navigate = useNavigate();
 
   return (
     <div>
-      <button
-      style={{cursor:"pointer"}}
-        className="card_arrow_icon arrow_btn"
-        onClick={() => {
-         alert("skdjfbjsdfbjahvb");
-          // navigate(`/blog-details/${val?.id}`);
-        }}
-      >
-        Read more &nbsp;
-        <FaArrowRight />
-      </button>
       <p>{isExpanded ? text : truncatedText}</p>
-      {text.split(" ").length > limit && (
-        <p
-          onClick={() => {
-            console.log("skdjfbjsdfbjahvb");
-            navigate(`/blog-details/${val?.id}`);
-          }}
-        >
-          {isExpanded ? "Show Less" : "Continue reading..."}
-        </p>
-      )}
     </div>
   );
 };
