@@ -9,6 +9,7 @@ import likedIcon from "../assets/likedIcon.png";
 import dummyCard from "../assets/dummy_card.jpg";
 import { likedPost } from "../api/postApi";
 import { Button } from "@mui/material";
+import { TiArrowRightThick } from "react-icons/ti";
 
 function BlogCard({ allPostData, isSkeletonLoader }) {
   const navigate = useNavigate();
@@ -89,11 +90,14 @@ function BlogCard({ allPostData, isSkeletonLoader }) {
 
             <div
               onClick={() => {
-                navigate(`/blog-details/${val?.id}`);
+                navigate(`/blog-details/${val?.post_id}`);
               }}
               className="moreDetail"
             >
-              <Button variant="outlined">More Details</Button>
+              <Button variant="outlined">
+                More Details &nbsp;{" "}
+                <TiArrowRightThick className="readmoreIcon" />
+              </Button>
             </div>
           </div>
         ))

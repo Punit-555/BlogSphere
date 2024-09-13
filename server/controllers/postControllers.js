@@ -294,19 +294,9 @@ exports.postDetails = (req, res) => {
 
         const postDetails = results[0];
 
-        res.json({
-            post: {
-                id: postDetails.id,
-                content: postDetails.content,
-                title: postDetails.title,
-                user_id: postDetails.user_id,
-            },
-            user: {
-                id: postDetails.user_id,
-                name: postDetails.name,
-                phone_number: postDetails.phone_number,
-            }
-        });
+        res.json(
+            postDetails
+        );
     });
 };
 

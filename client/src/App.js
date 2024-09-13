@@ -18,7 +18,12 @@ function App() {
   const { isLoading, setIsLoading } = useContext(LoaderContext);
   const { setUserDetails } = useContext(AuthContext);
   const userData = JSON.parse(localStorage.getItem("user_details"));
-  
+  const myRef = useRef(null);
+
+  useEffect(() => {
+
+  }, []);
+
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {
@@ -49,16 +54,11 @@ function App() {
     fetchUpdatedUserDetails();
   }, [setIsLoading, setUserDetails]);
 
-  const ref = useRef(null);
 
-  useEffect(() => {
-    if (ref.current) {
-      ref.current.scrollTop = 0;
-    }
-  }, []);
+ 
 
   return (
-    <div className="p-4" ref={ref}>
+    <div className="p-4" >
       <Header />
       {isLoading && <LoaderComponent />}
       <Routes>

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { blogDetails } from "../api/postApi";
 import { convertDate } from "../utility";
 import blogImage from "../assets/dummy_card.jpg";
+import likeIcon from "../assets/like.png";
 import { LoaderContext } from "../context/LoaderContext";
 function BlogDetails() {
   const { id } = useParams();
@@ -35,9 +36,33 @@ function BlogDetails() {
 
         <h2
           className="heading_h2"
-          style={{ color: "gray", fontSize: "1rem", lineHeight: "0.4  rem" }}
+          style={{
+            color: "gray",
+            fontSize: "1rem",
+            lineHeight: "0.4  rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "20px",
+          }}
         >
-          {convertDate(postDetails?.created_at)}
+          {convertDate(postDetails?.created_at)},{" "}
+          <span
+            style={{
+              color: "black",
+              display: "flex",
+              alignItems: "center",
+              gap: "20px",
+            }}
+          >
+            <img
+              className={`like_icon`}
+              src={likeIcon}
+              alt=""
+              width={32}
+              height={30}
+            />
+            {postDetails?.total_likes} likes{" "}
+          </span>
         </h2>
         <h2
           className="heading_h2"
@@ -47,7 +72,6 @@ function BlogDetails() {
           {convertDate(postDetails?.created_at)}
         </h2>
         <p className="blog_para">{postDetails?.content}</p>
-        <h2 className="heading_h2"></h2>
       </div>
     </div>
   );

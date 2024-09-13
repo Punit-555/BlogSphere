@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Auth from "./Auth";
 import { toast } from "react-toastify";
@@ -6,6 +6,7 @@ import { LoaderContext } from "../context/LoaderContext";
 import { AuthContext } from "../context/userAuth";
 
 const Header = () => {
+  const ref = useRef(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [profile, setProfile] = useState();
   const { userDetails } = useContext(AuthContext);
@@ -45,8 +46,14 @@ const Header = () => {
     setProfile("");
   };
 
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollTop = 0;
+    }
+  }, []);
+
   return (
-    <header className="header-fixed">
+    <header className="header-fixed" ref={ref}>
       <div className="header-limiter">
         <h1
           className="logo"
