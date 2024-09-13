@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import likeIcon from "../assets/like.png";
 import likedIcon from "../assets/likedIcon.png";
 import dummyCard from "../assets/dummy_card.jpg";
+import { likedPost } from "../api/postApi";
 
 function BlogCard({ allPostData, isSkeletonLoader }) {
   const navigate = useNavigate();
@@ -34,13 +35,7 @@ function BlogCard({ allPostData, isSkeletonLoader }) {
         </div>
       ) : allPostData?.data?.length > 0 ? (
         allPostData?.data?.map((val, index) => (
-          <div
-            className="card fade-in-down"
-            key={index}
-            onClick={() => {
-              navigate(`/blog-details/${val?.id}`);
-            }}
-          >
+          <div className="card fade-in-down" key={index}>
             <div>
               <img className="card_img" src={dummyCard} alt="" />
             </div>
@@ -53,7 +48,7 @@ function BlogCard({ allPostData, isSkeletonLoader }) {
                 gap: "5%",
               }}
             >
-              <div style={{width:"86%"}}>
+              <div style={{ width: "86%" }}>
                 <h3>{val?.title}</h3> <br />
               </div>
               <div>
@@ -65,6 +60,7 @@ function BlogCard({ allPostData, isSkeletonLoader }) {
                   height={30}
                   onClick={(e) => {
                     e.stopPropagation();
+                    likedPost(val?.user_id, val?.id);
                     toggleLike(val?.id);
                   }}
                 />
@@ -77,12 +73,27 @@ function BlogCard({ allPostData, isSkeletonLoader }) {
               <br />
               <span style={{ fontSize: "1rem", color: "grey" }}>
                 Created By: {val?.name ? val?.name : "--"},
-                <span style={{ position: "relative", left: "170px" }}>
+                <span
+                  style={{
+                    position: "relative",
+                    left: "165px",
+                    fontSize: "0.875rem",
+                  }}
+                >
                   {convertDate(val?.created_at)}{" "}
                 </span>
               </span>
             </div>
             <CardContent text={val?.content} val={val} />
+
+            <div
+              onClick={() => {
+                navigate(`/blog-details/${val?.id}`);
+              }}
+              className="moreDetail"
+            >
+              <button className="moreDetail_btn">More Details</button>
+            </div>
           </div>
         ))
       ) : (

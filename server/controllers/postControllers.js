@@ -3,16 +3,29 @@ const db = require('../config/db');
 
 // Get all posts (available to all users)
 exports.getAllPosts = (req, res) => {
-    const sql = 'SELECT * FROM posts ';
+    const sql = `
+        SELECT p.id as post_id, p.title, p.content, p.user_id , p.created_at, p.category,
+            -- Count total likes for each post
+            (SELECT COUNT(*) FROM likes l WHERE l.post_id = p.id) AS total_likes,
+            -- Get all comments with user details for each post
+            (SELECT JSON_ARRAYAGG(
+                JSON_OBJECT(
+                    'comment_id', c.id,
+                    'comment', c.content, -- Corrected to 'content'
+                    'user_id', u.id,
+                    'user_name', u.name
+                )
+            ) FROM comments c 
+            JOIN users u ON c.user_id = u.id WHERE c.post_id = p.id) AS comments
+        FROM posts p
+    `;
+
     db.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
-        const data = {
-            data: results
-        }
-        res.json(data);
+
+        res.json({ data: results });
     });
 };
-
 
 // Get a specific post by ID (available to all users)
 exports.getPostById = (req, res) => {
@@ -180,19 +193,41 @@ exports.searchPosts = (req, res) => {
 exports.likePost = (req, res) => {
     const { user_id, post_id } = req.body;
 
-    // Insert or update the like in the likes table
-    const query = 'INSERT INTO likes (user_id, post_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE created_at = NOW()';
-    db.query(query, [user_id, post_id], (err, result) => {
+    // Check if the user has already liked the post
+    const checkLikeQuery = 'SELECT * FROM likes WHERE user_id = ? AND post_id = ?';
+
+    db.query(checkLikeQuery, [user_id, post_id], (err, result) => {
         if (err) return res.status(500).send(err);
 
-        // Increment the total_likes count in the posts table
-        const updateLikesQuery = 'UPDATE posts SET total_likes = total_likes + 1 WHERE id = ?';
-        db.query(updateLikesQuery, [post_id], (err, updateResult) => {
-            if (err) return res.status(500).send(err);
-            res.send('Post liked successfully and total_likes updated');
-        });
+        if (result.length > 0) {
+            // If the like exists, it means the user is disliking (removing the like)
+            const dislikeQuery = 'DELETE FROM likes WHERE user_id = ? AND post_id = ?';
+            db.query(dislikeQuery, [user_id, post_id], (err, deleteResult) => {
+                if (err) return res.status(500).send(err);
+
+                // Decrease the total likes count for the post
+                const updateDislikesQuery = 'UPDATE posts SET total_likes = total_likes - 1 WHERE id = ?';
+                db.query(updateDislikesQuery, [post_id], (err, updateResult) => {
+                    if (err) return res.status(500).send(err);
+                    res.send('Post disliked successfully');
+                });
+            });
+        } else {
+            const likeQuery = 'INSERT INTO likes (user_id, post_id) VALUES (?, ?)';
+            db.query(likeQuery, [user_id, post_id], (err, insertResult) => {
+                if (err) return res.status(500).send(err);
+
+                // Increase the total likes count for the post
+                const updateLikesQuery = 'UPDATE posts SET total_likes = total_likes + 1 WHERE id = ?';
+                db.query(updateLikesQuery, [post_id], (err, updateResult) => {
+                    if (err) return res.status(500).send(err);
+                    res.send('Post liked successfully');
+                });
+            });
+        }
     });
-}
+};
+
 
 exports.totalLikePost = (req, res) => {
     const { post_id } = req.params;
@@ -236,7 +271,7 @@ exports.allComments = (req, res) => {
 // Post Details
 
 exports.postDetails = (req, res) => {
-    const { id } = req?.params;
+    const { id } = req.params;
 
     const query = `
         SELECT posts.*, users.*
@@ -245,20 +280,35 @@ exports.postDetails = (req, res) => {
         WHERE posts.id = ?
     `;
 
+    // Execute the query
     db.query(query, [id], (err, results) => {
         if (err) {
             console.error('Database error:', err);
-            return res.status(500).json({ error: err.message });
+            return res.status(500).json({ error: 'An error occurred while retrieving the post details.' });
         }
+
+        // Check if the post exists
         if (results.length === 0) {
             return res.status(404).json({ message: 'Post not found' });
         }
 
-
         const postDetails = results[0];
 
-        res.json({ ...postDetails, postId: id });
+        res.json({
+            post: {
+                id: postDetails.id,
+                content: postDetails.content,
+                title: postDetails.title,
+                user_id: postDetails.user_id,
+            },
+            user: {
+                id: postDetails.user_id,
+                name: postDetails.name,
+                phone_number: postDetails.phone_number,
+            }
+        });
     });
 };
+
 
 

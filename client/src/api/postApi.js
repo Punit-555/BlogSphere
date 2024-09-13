@@ -1,5 +1,8 @@
 import axios from "axios"
+import { toast } from "react-toastify";
 const token = localStorage.getItem("access_token");
+
+
 const createPost = async (payload) => {
     try {
         const response = await axios.post(`http://localhost:8080/posts/create`, payload, {
@@ -113,7 +116,6 @@ const blogDetails = async (id) => {
 
 
 const updatePost = async (id, formData) => {
-    console.log("PAYLLLLL", id, formData);
     try {
         const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/posts/update/${id}`, {
             title: formData.title || "",
@@ -135,5 +137,27 @@ const updatePost = async (id, formData) => {
 }
 
 
+// LIKE USER 
 
-export { createPost, allPostsByUser, deletePost, updateUser, searchPosts, blogDetails, updatePost };
+const likedPost = async (userId, postId) => {
+    try {
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/post/likes&comment/like`, {
+            "user_id": userId,
+            "post_id": postId
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        }
+        );
+        toast.success(response?.data);
+        return response;
+    } catch (error) {
+        console.error('Error signing up user:', error);
+        throw error;
+    }
+}
+
+
+export { createPost, allPostsByUser, deletePost, updateUser, searchPosts, blogDetails, updatePost, likedPost };

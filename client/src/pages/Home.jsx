@@ -3,14 +3,11 @@ import bannerImage from "../assets/banner-img.jpg";
 import { TiArrowRightThick } from "react-icons/ti";
 import { IoSearch } from "react-icons/io5";
 import { searchPosts } from "../api/postApi";
-import { convertDate } from "../utility";
-import dummyCard from "../assets/dummy_card.jpg";
-import CardContent from "../components/CardContent";
 import { allPosts } from "../api/getApi";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useNavigate } from "react-router-dom";
 import BlogCard from "../components/BlogCard";
+
 function Home() {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [allPostData, setAllPostData] = useState([]);

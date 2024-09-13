@@ -146,8 +146,8 @@
     cursor: pointer;
     max-width: 380px;
     min-width: 342px;
-    min-height: 450px;
-    max-height: 260px;
+    min-height: 550px;
+    max-height: 370px;
     z-index: auto;
 
     p {
@@ -156,8 +156,34 @@
     }
 }
 
+.moreDetail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    bottom: 0px;
+
+    &_btn {
+        width: 100%;
+        background-color: white;
+        border: 2px solid #2F2E2F;
+        font-size: 1rem;
+        transition: all 0.2s ease-out;
+        z-index: 0;
+        padding: 8px;
+        border-radius: 4px;
+
+        &:hover {
+            border: none;
+            background-color: #2F2E2F;
+            color: white;
+        }
+    }
+}
+
+
 .card:hover {
-    // transform: translateX(10px);
+    transform: translateX(5px, 5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
     // padding-left: 46px;
     transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12),
@@ -490,14 +516,13 @@
 .like_icon {
     cursor: pointer;
     transition: transform 0.3s, fill 0.3s;
-  }
-  
-  .like_icon:hover {
+}
+
+.like_icon:hover {
     transform: scale(1.2);
     fill: red;
-  }
-  
-  .like_icon.liked {
+}
+
+.like_icon.liked {
     fill: red;
-  }
-  
+}
