@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 const CardContent = ({ text, val }) => {
   const truncateText = (text, limit) => {
-    const words = text.split(" ");
-    if (words.length <= limit) return text;
-    return words.slice(0, limit).join(" ") + "...";
+    const words = text.length > 0 && text?.split(" ");
+    if (words?.length <= limit) return text;
+    return words?.slice(0, limit)?.join(" ") + "...";
   };
   const [isExpanded, setIsExpanded] = useState(false);
   const limit = 20;

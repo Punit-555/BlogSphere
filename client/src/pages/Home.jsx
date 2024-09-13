@@ -4,67 +4,64 @@ import { TiArrowRightThick } from "react-icons/ti";
 import { IoSearch } from "react-icons/io5";
 import { searchPosts } from "../api/postApi";
 import { allPosts } from "../api/getApi";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import BlogCard from "../components/BlogCard";
+import ReactLoadingSkeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import Select from "react-select";
+import { categoryOptions, options } from "../utility";
 
 function Home() {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [allPostData, setAllPostData] = useState([]);
   const [isSkeletonLoader, setIsSkeletonLoader] = useState(true);
   const [isDataLoader, setIsDataLoader] = useState(true);
-  // const { setIsLoading: setGlobalLoading } = useContext(LoaderContext);
 
-  const [selectedOption, setSelectedOption] = useState({
-    name: "",
-    enteredValue: "",
-    selectedCategory: "title",
-  });
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [enteredValue, setEnteredValue] = useState("");
 
-  const handleSelectChange = (e) => {
-    setSelectedOption({
-      ...selectedOption,
-      selectedCategory: e.target.value,
-    });
+  const handleCategoryChange = (selectedOption) => {
+    setSelectedCategory(selectedOption);
+  };
+
+  const handleTextChange = (e) => {
+    setEnteredValue(e.target.value);
   };
 
   useEffect(() => {
     const searchData = async () => {
       try {
         setIsSkeletonLoader(true);
-        const response = await searchPosts(selectedOption);
+
+        const response = await searchPosts({
+          selectedCategory: selectedCategory?.value,
+          enteredValue: enteredValue,
+        });
         setAllPostData(response);
-        setTimeout(() => {
-          setIsSkeletonLoader(false);
-        }, 1500);
       } catch (error) {
-        setTimeout(() => {
-          setIsSkeletonLoader(false);
-        }, 1500);
+        console.error(error);
+      } finally {
+        setIsSkeletonLoader(false);
       }
     };
+    console.log("SSSSSSSSSSS", selectedCategory, enteredValue);
     const getAllPosts = async () => {
       try {
         setIsSkeletonLoader(true);
         const response = await allPosts();
         setAllPostData(response);
-        setTimeout(() => {
-          setIsSkeletonLoader(false);
-        }, 1500);
       } catch (error) {
-        console.log(error);
-        setTimeout(() => {
-          setIsSkeletonLoader(false);
-        }, 1500);
+        console.error(error);
+      } finally {
+        setIsSkeletonLoader(false);
       }
     };
 
-    if (selectedOption.enteredValue === "") {
+    if (enteredValue === "" && !selectedCategory) {
       getAllPosts();
     } else {
       searchData();
     }
-  }, [selectedOption]);
+  }, [selectedCategory, enteredValue]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -77,7 +74,11 @@ function Home() {
       <section className="banner_section fade-in-down">
         <div>
           {isDataLoader ? (
-            <Skeleton height={100} width={600} style={{ zIndex: "-2" }} />
+            <ReactLoadingSkeleton
+              height={100}
+              width={600}
+              style={{ zIndex: "-2" }}
+            />
           ) : (
             <>
               <h1 className="heading heading_h2" style={{ fontWeight: "500" }}>
@@ -88,7 +89,7 @@ function Home() {
           )}
 
           {isDataLoader ? (
-            <Skeleton
+            <ReactLoadingSkeleton
               height={60}
               width={400}
               style={{ margin: "20px 0px", zIndex: "-2" }}
@@ -107,7 +108,11 @@ function Home() {
 
         <div>
           {isDataLoader ? (
-            <Skeleton height={400} width={700} style={{ zIndex: "-2" }} />
+            <ReactLoadingSkeleton
+              height={400}
+              width={700}
+              style={{ zIndex: "-2" }}
+            />
           ) : (
             <img
               className="banner_image"
@@ -115,7 +120,7 @@ function Home() {
               alt="Banner"
               onLoad={() => setImageLoaded(true)}
               style={{ display: imageLoaded ? "block" : "none" }}
-              onError={bannerImage}
+              onError={(e) => (e.target.style.display = "none")}
             />
           )}
         </div>
@@ -125,65 +130,71 @@ function Home() {
         <div>
           <div className="search_container">
             <div className="input_container">
-              <label htmlFor="Select">Search By</label>
+              <label htmlFor="select">Search By</label>
               <br />
-              <select
-                defaultValue={""}
-                className="form_select"
-                onChange={(e) => handleSelectChange(e, "CAT")}
-              >
-                <option value="title">Title</option>
-                <option value="category">Category</option>
-                <option value="createdAt">Created At</option>
-              </select>
+              <Select
+                options={options}
+                value={selectedCategory}
+                onChange={handleCategoryChange}
+                className="select_category"
+                placeholder="Select a category"
+                styles={{
+                  control: (baseStyles, state) => ({
+                    ...baseStyles,
+                    minWidth: "160px",
+                  }),
+                }}
+              />
             </div>
 
-            {selectedOption.selectedCategory === "category" ? (
-              <div className="input_container">
-                <label htmlFor="select">Select Category</label>
+            {selectedCategory?.value === "category" ? (
+              <div className="">
+                <label htmlFor="category-select">Select Category</label>
                 <br />
-                <select
-                  defaultValue={""}
-                  className="cat_select"
-                  onChange={(e) =>
-                    setSelectedOption({
-                      ...selectedOption,
-                      enteredValue: e.target.value,
-                    })
-                  }
-                >
-                  <option value="" selected disabled>
-                    Select a category
-                  </option>
-                  <option value="Technology">Technology</option>
-                  <option value="Health & Wellness">Health & Wellness</option>
-                  <option value="Finance">Finance</option>
-                  <option value="Food & Recipes">Food & Recipes</option>
-                  <option value="Lifestyle">Lifestyle</option>
-                  <option value="Education">Education</option>
-                  <option value="Entertainment">Entertainment</option>
-                </select>
-              </div>
-            ) : (
-              <div className="input_container">
-                <label htmlFor="input">Enter Text</label>
-                <input
-                  type="text"
-                  className="input_field"
-                  name="enteredValue"
-                  placeholder="type here.."
-                  onChange={(e) => {
-                    setSelectedOption({
-                      ...selectedOption,
-                      enteredValue: e.target.value,
-                    });
-                  }}
+                <Select
+                  options={categoryOptions}
+                  value={categoryOptions.find(
+                    (option) => option.value === enteredValue
+                  )}
+                  onChange={(option) => setEnteredValue(option?.value || "")}
+                  className=""
+                  placeholder="Select a category"
+                  isClearable
                 />
               </div>
+            ) : (
+              selectedCategory?.value == "title" && (
+                <div className="input_container">
+                  <label htmlFor="search-input">
+                    Enter {selectedCategory?.value}
+                  </label>
+                  <input
+                    type="text"
+                    className="input_field"
+                    name="enteredValue"
+                    placeholder="Type here..."
+                    value={enteredValue}
+                    onChange={handleTextChange}
+                    style={{ marginTop: "1px", padding: "10px" }}
+                  />
+                </div>
+              )
             )}
 
             <div className="btn_group">
-              <button className="search-btn">
+              <button
+                style={{
+                  marginBottom: "2px",
+                  padding: "13px",
+                  marginTop: "18px",
+                }}
+                className="search-btn"
+                onClick={() => {
+                  if (selectedCategory?.value === "category" && !enteredValue) {
+                    alert("Please select a category or enter a search term.");
+                  }
+                }}
+              >
                 <IoSearch />
                 Search
               </button>
@@ -193,7 +204,7 @@ function Home() {
 
         <div className="card_container fade-in-down">
           <BlogCard
-            isSkeletonLoaderm={isSkeletonLoader}
+            isSkeletonLoader={isSkeletonLoader}
             allPostData={allPostData}
           />
         </div>

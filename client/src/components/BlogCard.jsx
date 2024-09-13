@@ -8,6 +8,7 @@ import likeIcon from "../assets/like.png";
 import likedIcon from "../assets/likedIcon.png";
 import dummyCard from "../assets/dummy_card.jpg";
 import { likedPost } from "../api/postApi";
+import { Button } from "@mui/material";
 
 function BlogCard({ allPostData, isSkeletonLoader }) {
   const navigate = useNavigate();
@@ -92,7 +93,7 @@ function BlogCard({ allPostData, isSkeletonLoader }) {
               }}
               className="moreDetail"
             >
-              <button className="moreDetail_btn">More Details</button>
+              <Button variant="outlined">More Details</Button>
             </div>
           </div>
         ))

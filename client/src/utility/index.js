@@ -46,3 +46,24 @@ export function convertDate(dateString) {
         return "Invalid date";
     }
 }
+
+
+export const options = [
+    { label: "Select", value: "" },
+    { label: "Title", value: "title" },
+    { label: "Category", value: "category" },
+    { label: "Created At", value: "createdAt" },
+
+
+];
+
+export const categoryOptions = [
+    { label: "Select a category", value: "" },
+    { label: "Technology", value: "Technology" },
+    { label: "Health & Wellness", value: "Health & Wellness" },
+    { label: "Finance", value: "Finance" },
+    { label: "Food & Recipes", value: "Food & Recipes" },
+    { label: "Lifestyle", value: "Lifestyle" },
+    { label: "Education", value: "Education" },
+    { label: "Entertainment", value: "Entertainment" },
+];
