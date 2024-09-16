@@ -3,7 +3,7 @@ import Header from "./components/Header";
 import Home from "./pages/Home";
 import "./styles/main.scss";
 import Footer from "./components/Footer";
-import { useContext, useEffect, useRef } from "react";
+import { Suspense, useContext, useEffect, useRef } from "react";
 import { LoaderContext } from "./context/LoaderContext";
 import LoaderComponent from "./components/LoaderComponent";
 import { ToastContainer } from 'react-toastify';
@@ -55,20 +55,24 @@ function App() {
   }, [setIsLoading, setUserDetails]);
 
 
- 
+
 
   return (
     <div className="p-4" >
-      <Header />
-      {isLoading && <LoaderComponent />}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/blogs" element={<BlogsPage />} />
-        <Route path="/blog-details/:id" element={<BlogDetails />} />
-        <Route path="/contact" element={<ContactUs />} />
-      </Routes>
-      <Footer />
+      <Suspense fallback={<LoaderComponent />} >
+
+
+        <Header />
+        {/* {isLoading && <LoaderComponent />} */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/blogs" element={<BlogsPage />} />
+          <Route path="/blog-details/:id" element={<BlogDetails />} />
+          <Route path="/contact" element={<ContactUs />} />
+        </Routes>
+        <Footer />
+      </Suspense>
       <ToastContainer />
     </div>
   );

@@ -84,6 +84,15 @@ const Auth = ({ isOpen, onClose }) => {
         setTimeout(() => {
           setIsLoading(false);
         }, 1000);
+        localStorage.setItem("access_token", response?.data?.token);
+        localStorage.setItem(
+          "user_details",
+          JSON.stringify(response?.data?.user)
+        );
+        setUserDetails(response?.data?.user);
+
+        setIsUserLoggedIn(true);
+
         toast.success(response?.data?.message);
         onClose();
       } catch (error) {
@@ -273,121 +282,6 @@ const Auth = ({ isOpen, onClose }) => {
         </Box>
       )}
     </Modal>
-    // <div className="modal-overlay" onClick={onClose}>
-    //   <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-    //
-    //     {isLogin ? (
-    //       <div className="form">
-    //         <div className="auth_heading">
-    //           <h1>Welcome Back</h1>
-    //         </div>
-
-    //         <div className="input_container">
-    //           <label htmlFor="email">Email</label>
-    //           <input
-    //             type="email"
-    //             className="input_field"
-    //             name="email"
-    //             onChange={handleLoginChange}
-    //             value={loginForm.email}
-    //           />
-    //         </div>
-    //         <div className="input_container">
-    //           <label htmlFor="password">Password</label>
-    //           <input
-    //             type="password"
-    //             className="input_field"
-    //             name="password"
-    //             onChange={handleLoginChange}
-    //             value={loginForm.password}
-    //           />
-    //         </div>
-
-    //         <p
-    //           className="account_text"
-    //           onClick={() => {
-    //             setIsLogin(false);
-    //           }}
-    //         >
-    //           Don't have an account ?
-    //         </p>
-    //         <div className="btn_group">
-    //           <button
-    //             className="signup_btn"
-    //             onClick={(e) => {
-    //               handleSubmitLogin(e);
-    //             }}
-    //           >
-    //             Login
-    //           </button>
-    //         </div>
-    //       </div>
-    //     ) : (
-    //       <div className="form">
-    //         <div className="auth_heading">
-    //           <h1>Create an account</h1>
-    //         </div>
-    //         <div className="input_container">
-    //           <label htmlFor="name">Your Full Name</label>
-    //           <input
-    //             type="text"
-    //             className="input_field"
-    //             name="name"
-    //             onChange={handleChange}
-    //             value={formData.name}
-    //           />
-    //         </div>
-    //         <div className="input_container">
-    //           <label htmlFor="email">Email</label>
-    //           <input
-    //             type="email"
-    //             className="input_field"
-    //             name="email"
-    //             onChange={handleChange}
-    //             value={formData.email}
-    //           />
-    //         </div>
-    //         <div className="input_container">
-    //           <label htmlFor="password">Password</label>
-    //           <input
-    //             type="password"
-    //             className="input_field"
-    //             name="password"
-    //             onChange={handleChange}
-    //             value={formData?.password}
-    //           />
-    //         </div>
-    //         <div className="input_container">
-    //           <label htmlFor="phoneNumber">Phone Number</label>
-    //           <input
-    //             type="text"
-    //             className="input_field"
-    //             name="phoneNumber"
-    //             onChange={handleChange}
-    //             value={formData?.phoneNumber}
-    //           />
-    //         </div>
-
-    //         <p
-    //           className="account_text"
-    //           onClick={() => {
-    //             setIsLogin(!isLogin);
-    //           }}
-    //         >
-    //           Already have an account?
-    //         </p>
-    //         <div
-    //           className="btn_group"
-    //           onClick={(e) => {
-    //             handleSubmit(e);
-    //           }}
-    //         >
-    //           <button className="signup_btn">Signup</button>
-    //         </div>
-    //       </div>
-    //     )}
-    //   </div>
-    // </div>
   );
 };
 

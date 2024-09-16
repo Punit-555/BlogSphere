@@ -17,7 +17,7 @@ function Profile() {
     phoneNumber: userDetails?.phoneNumber,
     // password: ,
   });
-
+console.log("userDetails",userDetails)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({

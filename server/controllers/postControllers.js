@@ -4,19 +4,25 @@ const db = require('../config/db');
 // Get all posts (available to all users)
 exports.getAllPosts = (req, res) => {
     const sql = `
-        SELECT p.id as post_id, p.title, p.content, p.user_id , p.created_at, p.category,
-            -- Count total likes for each post
-            (SELECT COUNT(*) FROM likes l WHERE l.post_id = p.id) AS total_likes,
-            -- Get all comments with user details for each post
-            (SELECT JSON_ARRAYAGG(
-                JSON_OBJECT(
-                    'comment_id', c.id,
-                    'comment', c.content, -- Corrected to 'content'
-                    'user_id', u.id,
-                    'user_name', u.name
-                )
-            ) FROM comments c 
-            JOIN users u ON c.user_id = u.id WHERE c.post_id = p.id) AS comments
+        SELECT p.id AS post_id, 
+               p.title, 
+               p.content, 
+               p.user_id, 
+               p.created_at, 
+               p.category,
+               -- Count total likes for each post
+               (SELECT COUNT(*) FROM likes l WHERE l.post_id = p.id) AS total_likes,
+               -- Get all comments with user details for each post
+               (SELECT JSON_ARRAYAGG(
+                   JSON_OBJECT(
+                       'comment_id', c.id,
+                       'comment', c.content,
+                       'user_id', u.id,
+                       'user_name', u.name
+                   )
+               ) FROM comments c 
+               JOIN users u ON c.user_id = u.id 
+               WHERE c.post_id = p.id) AS comments
         FROM posts p
     `;
 
@@ -269,15 +275,39 @@ exports.allComments = (req, res) => {
 
 
 // Post Details
-
 exports.postDetails = (req, res) => {
     const { id } = req.params;
 
+    // Query to fetch the post details along with comments and their user details
     const query = `
-        SELECT posts.*, users.*
-        FROM posts
-        JOIN users ON posts.user_id = users.id
-        WHERE posts.id = ?
+        SELECT p.id AS post_id,
+               p.title,
+               p.content,
+               p.user_id AS post_user_id,
+               p.created_at,
+               p.category,
+               u.name AS post_user_name,
+               u.email AS post_user_email,
+               u.phoneNumber AS post_user_phoneNumber,
+               -- Get all comments with user details
+               JSON_ARRAYAGG(
+                   JSON_OBJECT(
+                       'comment_id', c.id,
+                       'comment', c.content,
+                       'comment_user_id', cu.id,
+                       'comment_user_name', cu.name,
+                                              'comment_created_at', c.created_at
+
+                   )
+               ) AS comments,
+               -- Count total likes
+               (SELECT COUNT(*) FROM likes l WHERE l.post_id = p.id) AS total_likes
+        FROM posts p
+        JOIN users u ON p.user_id = u.id
+        LEFT JOIN comments c ON p.id = c.post_id
+        LEFT JOIN users cu ON c.user_id = cu.id
+        WHERE p.id = ?
+        GROUP BY p.id, u.id
     `;
 
     // Execute the query
@@ -294,11 +324,8 @@ exports.postDetails = (req, res) => {
 
         const postDetails = results[0];
 
-        res.json(
-            postDetails
-        );
+        res.json(postDetails);
     });
 };
-
 
 

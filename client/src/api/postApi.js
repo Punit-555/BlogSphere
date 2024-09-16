@@ -160,4 +160,26 @@ const likedPost = async (userId, postId) => {
 }
 
 
-export { createPost, allPostsByUser, deletePost, updateUser, searchPosts, blogDetails, updatePost, likedPost };
+const addComment = async (userId, postId, content) => {
+    try {
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/posts/comment`, {
+            "user_id": userId,
+            "post_id": postId,
+            "content": content
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        }
+        );
+        toast.success(response?.data);
+        return response;
+    } catch (error) {
+        console.error('Error signing up user:', error);
+        throw error;
+    }
+}
+
+
+export { addComment, createPost, allPostsByUser, deletePost, updateUser, searchPosts, blogDetails, updatePost, likedPost };

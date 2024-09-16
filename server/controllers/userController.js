@@ -78,7 +78,11 @@ exports.signup = async (req, res) => {
                     console.error('Error inserting user:', err);
                     return res.status(500).json({ error: 'Failed to register user', details: err.message });
                 }
-                res.status(201).json({ message: 'User registered successfully', userId, token, result });
+                res.status(201).json({
+                    message: 'User registered successfully', userId, token, user: {
+                        name, email, password, phoneNumber,
+                    }
+                });
             });
 
 

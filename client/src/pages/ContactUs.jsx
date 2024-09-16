@@ -3,7 +3,7 @@ import React from "react";
 function ContactUs() {
   return (
     <div className="home_container">
-      <section className="about_form_section">
+      <section className="about_form_section fade-in-down">
         <div className="about_form">
           <div className="about_form_input_container">
             <h1 className="heading_h1">Contact Us</h1>

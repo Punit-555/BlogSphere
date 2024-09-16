@@ -526,3 +526,24 @@
 .like_icon.liked {
     fill: red;
 }
+
+
+
+.comment_container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+
+}
+
+.comment_box {
+    padding: 6px;
+    display: flex;
+    // justify-content: center;
+    align-items: center;
+    border: 1px solid #eee;
+    box-shadow: 1px 2px 3px #ccc;
+
+    gap: 10px;
+}
