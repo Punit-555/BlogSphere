@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const db = require('../config/db');
 const jwt = require('jsonwebtoken');
@@ -34,7 +34,7 @@ exports.signup = async (req, res) => {
                 userExists = userIdResults.length > 0;
             }
             // Hash the user's password
-            const hashedPassword = await bcrypt.hash(password, 10);
+            const hashedPassword = await bcrypt.hashSync(password, 10);
 
             // Create a JWT token
             const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1d' });
