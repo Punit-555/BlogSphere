@@ -1,0 +1,64 @@
+.btn {
+    width: 100%;
+    max-width: 140px;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    &_login {
+        position: relative;
+        left: 0%;
+        top: 80%;
+        background-color: white;
+        border: 2px solid #2F2E2F;
+        font-size: 1rem;
+        transition: all 0.2s ease-out;
+        z-index: 0;
+
+        &:hover {
+
+            border: none;
+            background-color: #2F2E2F;
+            color: white;
+        }
+    }
+
+    &_cancel {
+        background-color: red;
+    }
+}
+
+.nav_item {
+    display: flex;
+    gap: 10px;
+}
+
+
+.profile_select {
+    width: 100%;
+    max-width: 140px;
+    padding: 10px 12px 10px 15px;
+    border: 2px solid #eee;
+    border-radius: 6px;
+    transition: all 0.4s ease-in-out;
+    font-size: 1rem;
+
+}
+
+
+.category_btn{
+    width: 100%;
+    padding: 14px;
+     background-color:white;
+     border: 1px solid #2F2E2F;
+     text-transform: uppercase;
+     color: #2F2E2F;
+     padding: 2px 8px;
+     border-radius: 70px;
+     margin: 0;
+     font-size: 12px;
+     font-weight: 600;
+     max-width: fit-content;
+}

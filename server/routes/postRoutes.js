@@ -11,17 +11,37 @@ router.get('/all-posts', postController.getAllPosts);
 // Create Posts 
 router.post('/create', authMiddleware, postController.createPost);
 
-// find Posts 
-// router.get('/postByID/:id', authMiddleware, postController.getPostById);
+// find Posts Details
+router.post('/search-posts', postController.searchPosts);
 
-// find Posts by User 
+// Find Posts by User 
 router.post('/postByUser', authMiddleware, postController.getPostByUser);
 
-// update Posts 
-router.put('/posts/:id', authMiddleware, postController.updatePost);
 
 // delete Posts 
 router.delete('/delete/:id', authMiddleware, postController.deletePost);
+
+// post details 
+router.post("/post-details/:id", postController.postDetails);
+
+
+// Update Post 
+router.put("/update/:id", authMiddleware, postController.updatePost);
+
+
+// likse  a post 
+router.post("/like", authMiddleware, postController.likePost);
+
+// get Total Liks on the Post 
+router.get("/likes/:post_id", authMiddleware, postController.totalLikePost);
+
+// add Comments 
+router.post("/comment", authMiddleware, postController.commentPost);
+
+// all Comments
+router.post("/comments/:post_id", authMiddleware, postController.allComments);
+
+
 
 
 

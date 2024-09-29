@@ -1,20 +1,18 @@
 const fs = require('fs');
 const path = require('path');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const db = require('../config/db');
 const jwt = require('jsonwebtoken');
 
 
+
 exports.signup = async (req, res) => {
-    const { name, email, password, phoneNumber } = req.body;
+    const { name, email, password, phoneNumber, } = req.body;
 
     try {
-        const generateRandomId = () => {
-            return Math.floor(Math.random() * 90) + 10;
-        };
+        const generateRandomId = () => Math.floor(Math.random() * 90) + 10;
 
-        // Check if email already exists
         const checkUserQuery = 'SELECT email FROM users WHERE email = ?';
         db.query(checkUserQuery, [email], async (err, results) => {
             if (err) {
@@ -26,7 +24,6 @@ exports.signup = async (req, res) => {
                 return res.status(400).json({ error: 'User already exists.' });
             }
 
-            // Generate a unique two-digit user ID
             let userId;
             let userExists = true;
             const checkUserIdQuery = 'SELECT id FROM users WHERE id = ?';
@@ -36,15 +33,14 @@ exports.signup = async (req, res) => {
                 const [userIdResults] = await db.promise().query(checkUserIdQuery, [userId]);
                 userExists = userIdResults.length > 0;
             }
-
             // Hash the user's password
-            const hashedPassword = await bcrypt.hash(password, 10);
+            const hashedPassword = await bcrypt.hashSync(password, 10);
 
             // Create a JWT token
             const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
             // Send email to user
-            var transporter = nodemailer.createTransport({
+            const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
                     user: process.env.EMAIL_USER,
@@ -56,7 +52,7 @@ exports.signup = async (req, res) => {
             let htmlContent = fs.readFileSync(filePath, 'utf8');
             htmlContent = htmlContent.replace('{{name}}', name);
 
-            var mailOptions = {
+            const mailOptions = {
                 from: process.env.EMAIL_USER,
                 to: email,
                 subject: 'Signup Successful!',
@@ -71,17 +67,24 @@ exports.signup = async (req, res) => {
                 }
             });
 
+
+
             // Insert the new user into the database with the unique two-digit user ID
             const query = 'INSERT INTO users (id, name, email, password, phoneNumber, token) VALUES (?, ?, ?, ?, ?, ?)';
+
 
             db.query(query, [userId, name, email, hashedPassword, phoneNumber, token], (err, result) => {
                 if (err) {
                     console.error('Error inserting user:', err);
-                    return res.status(500).json({ error: 'Failed to register user' });
+                    return res.status(500).json({ error: 'Failed to register user', details: err.message });
                 }
-
-                res.status(201).json({ message: 'User registered successfully', userId, token });
+                res.status(201).json({
+                    message: 'User registered successfully', userId, token, user: {
+                        name, email, password, phoneNumber,
+                    }
+                });
             });
+
 
         });
 
@@ -114,8 +117,7 @@ exports.login = (req, res) => {
                 return res.status(400).json({ error: 'Invalid email or password' });
             }
 
-            // Remove sensitive information before sending it back to the client
-            delete user.password;  // Exclude the password from user details
+            delete user.password;
 
             const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
 
@@ -206,3 +208,62 @@ exports.deleteUser = (req, res) => {
         });
     });
 };
+
+
+
+
+exports.updateUser = async (req, res) => {
+    const { name, email } = req.body;
+    const { id } = req.params;
+    // Validate user ID
+    if (!id) {
+        return res.status(400).json({ message: 'User ID is required.' });
+    }
+
+    // Validate request body
+    if (!name || !email) {
+        return res.status(400).json({ message: 'Name and email are required.' });
+    }
+
+    // Use parameterized query to prevent SQL injection
+    const updateQuery = `UPDATE users SET name = ?, email = ? WHERE id = ?`;
+
+    try {
+        db.query(updateQuery, [name, email, id], (err, results) => {
+            if (err) {
+                console.error('Error querying user:', err);
+                return res.status(500).json({ error: 'Failed to update user.' });
+            }
+
+            if (results.affectedRows === 0) {
+                return res.status(404).json({ message: 'User not found.' });
+            }
+
+            // Respond with success message and updated user details
+            res.status(200).json({ message: 'User updated successfully.', user: { id, name, email } });
+        });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ message: 'An error occurred while updating the user.' });
+    }
+};
+
+
+exports.getUpdatedUser = (req, res) => {
+    const { id } = req.params;
+    const sql = `SELECT * FROM  users WHERE  id = ${id}  `;
+
+    db.query(sql, [id], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'No user Found!' });
+        }
+
+        res.json(results);
+    });
+};
+
+

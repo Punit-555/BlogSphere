@@ -21,8 +21,6 @@ function Footer() {
           <FaPinterest />
         </div>
       </div>
-
-      {/* <div className="copyright">COPYRIGHT 2024 The BlogShere</div> */}
     </footer>
   );
 }

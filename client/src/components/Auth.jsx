@@ -3,12 +3,13 @@ import { toast } from "react-toastify";
 import { loginUserAPI, signupUserAPI } from "../api/userAuth";
 import { LoaderContext } from "../context/LoaderContext";
 import { AuthContext } from "../context/userAuth";
+import { Box, FormControl, FormLabel, Modal, Typography } from "@mui/material";
 
 const Auth = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
   const { setIsLoading } = useContext(LoaderContext);
   const { setIsUserLoggedIn } = useContext(AuthContext);
-  const { setUserDetails, userDetails } = useContext(AuthContext);
+  const { setUserDetails } = useContext(AuthContext);
 
   const [loginForm, setLoginForm] = useState({
     email: "",
@@ -83,6 +84,15 @@ const Auth = ({ isOpen, onClose }) => {
         setTimeout(() => {
           setIsLoading(false);
         }, 1000);
+        localStorage.setItem("access_token", response?.data?.token);
+        localStorage.setItem(
+          "user_details",
+          JSON.stringify(response?.data?.user)
+        );
+        setUserDetails(response?.data?.user);
+
+        setIsUserLoggedIn(true);
+
         toast.success(response?.data?.message);
         onClose();
       } catch (error) {
@@ -129,23 +139,40 @@ const Auth = ({ isOpen, onClose }) => {
     }
   };
 
-  console.log("sadkfjbaskdufhvkasdgvkasdf")
   if (!isOpen) return null;
-
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #eee",
+    boxShadow: 24,
+    borderRadius: "6px",
+    p: 4,
+  };
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>
-          X
-        </button>
-        {isLogin ? (
+    <Modal
+      open={isOpen}
+      onClose={onClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+      border={style.border}
+      borderRadius={style.borderRadius}
+    >
+      {isLogin ? (
+        <Box sx={style}>
+          <button className="modal-close" onClick={onClose}>
+            X
+          </button>
+          <div className="auth_heading">
+            <h1>Welcome Back</h1>{" "}
+          </div>
           <div className="form">
-            <div className="auth_heading">
-              <h1>Welcome Back</h1>
-            </div>
-
             <div className="input_container">
               <label htmlFor="email">Email</label>
+
               <input
                 type="email"
                 className="input_field"
@@ -164,7 +191,6 @@ const Auth = ({ isOpen, onClose }) => {
                 value={loginForm.password}
               />
             </div>
-
             <p
               className="account_text"
               onClick={() => {
@@ -184,7 +210,13 @@ const Auth = ({ isOpen, onClose }) => {
               </button>
             </div>
           </div>
-        ) : (
+        </Box>
+      ) : (
+        <Box sx={style}>
+          <button className="modal-close" onClick={onClose}>
+            X
+          </button>
+
           <div className="form">
             <div className="auth_heading">
               <h1>Create an account</h1>
@@ -247,9 +279,9 @@ const Auth = ({ isOpen, onClose }) => {
               <button className="signup_btn">Signup</button>
             </div>
           </div>
-        )}
-      </div>
-    </div>
+        </Box>
+      )}
+    </Modal>
   );
 };
 

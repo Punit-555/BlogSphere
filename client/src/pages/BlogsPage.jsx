@@ -3,11 +3,24 @@ import { toast } from "react-toastify";
 import { allPostsByUser, createPost, deletePost } from "../api/postApi";
 import { LoaderContext } from "../context/LoaderContext";
 import { AuthContext } from "../context/userAuth";
+import { convertDate } from "../utility";
+import Skeleton from "react-loading-skeleton";
+import EditPost from "../components/EditPost";
+import { FiEdit } from "react-icons/fi";
+import { RxCross2 } from "react-icons/rx";
+import DeleteMessage from "../components/DeleteMessage";
+
 
 function BlogsPage() {
+
+  const [editModal, setEditModal] = useState(false);
   const { setIsLoading } = useContext(LoaderContext);
   const { userDetails } = useContext(AuthContext);
   const [createdPosts, setCreatedPosts] = useState();
+  const [skeletonLoading, setIsSkeletonLoading] = useState();
+  const [selectedPostData, setSelectedPostData] = useState();
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
   const token = localStorage.getItem("access_token");
 
   const [formData, setFormData] = useState({
@@ -58,9 +71,11 @@ function BlogsPage() {
 
     if (validateForm()) {
       setIsLoading(true);
+      setIsSkeletonLoading(true);
       try {
         const response = await createPost(formData);
         setTimeout(() => {
+          setIsSkeletonLoading(false);
           setIsLoading(false);
           toast.success("Post created successfully!");
           fetchData();
@@ -71,10 +86,12 @@ function BlogsPage() {
           category: "",
         });
       } catch (error) {
+        setIsSkeletonLoading(false);
         setIsLoading(false);
         toast.error("Something went wrong!.");
       }
     } else {
+      setIsSkeletonLoading(false);
       setIsLoading(false);
       toast.error("Please fill out all fields correctly.");
       return;
@@ -83,18 +100,22 @@ function BlogsPage() {
 
   const fetchData = async () => {
     setIsLoading(true);
+    setIsSkeletonLoading(true);
     try {
       const response = await allPostsByUser(userDetails?.id);
       setCreatedPosts(response);
       setTimeout(() => {
+        setIsSkeletonLoading(false);
         setIsLoading(false);
-      }, 1500);
+      }, 1000);
     } catch (error) {
+      setIsSkeletonLoading(false);
     }
   };
+
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [EditPost]);
 
   const handleDelete = async (postId) => {
     if (token) {
@@ -104,11 +125,10 @@ function BlogsPage() {
         setTimeout(() => {
           setIsLoading(false);
         }, 1000);
-
+        setOpenDeleteModal(false);
         toast.success(response?.message);
         fetchData();
-      } catch (error) {
-      }
+      } catch (error) {}
     } else {
       toast.error("Login to delete the Posts!");
       return;
@@ -117,8 +137,8 @@ function BlogsPage() {
 
   return (
     <div className="blog_container">
-      <div>
-        <h1>Create Posts</h1>
+      <div className="blog_container_div fade-in-down ">
+        <h1 style={{ fontWeight: "500" }}>Create Your Posts</h1>
         <div className="form">
           <div className="input_container">
             <label htmlFor="title">Title</label>
@@ -173,10 +193,20 @@ function BlogsPage() {
         </div>
       </div>
 
-      <div>
-        <h1>Posts Created By You .</h1>
+      <div className="fade-in-down ">
+        <h1 style={{ fontWeight: "500" }}>Posts Created By You .</h1>
 
         <div className="card_container">
+          {skeletonLoading && (
+            <>
+              <Skeleton height={200} width={1290} />
+              <Skeleton height={200} width={1290} />
+              <Skeleton height={200} width={1290} />
+              <Skeleton height={200} width={1290} />
+              <Skeleton height={200} width={1290} />
+              <Skeleton height={200} width={1290} />
+            </>
+          )}
           {createdPosts?.length > 0 &&
             createdPosts?.map((val, index) => {
               return (
@@ -185,23 +215,57 @@ function BlogsPage() {
                   className="blogCard"
                   style={{ position: "relative", width: "100%" }}
                 >
-                  <button
-                    className="deleteButton"
-                    onClick={() => handleDelete(val.id)}
-                  >
-                    &#x2716;
-                  </button>
+                  <div className="delete_btn_group">
+                    <button
+                      className="delete_btn"
+                      data-tooltip="Delete Post"
+                      onClick={() => {
+                        setOpenDeleteModal(!openDeleteModal);
+                        setSelectedPostData(val);
+                      }}
+                    >
+                      <RxCross2 />
+                    </button>
+                    <button
+                      className="delete_btn"
+                      data-tooltip="Edit Post "
+                      onClick={() => {
+                        setEditModal(!editModal);
+                        setSelectedPostData(val);
+                      }}
+                    >
+                      <FiEdit />
+                    </button>
+                  </div>
+
                   <h3>{val?.title}</h3>
                   <h4>{val?.category}</h4>
                   <p>{val?.content}</p>
                   <span style={{ color: "grey", fontWeight: "100" }}>
-                    2 min ago
+                    {convertDate(val?.created_at)}
                   </span>
                 </div>
               );
             })}
         </div>
       </div>
+      {editModal && (
+        <EditPost
+          setEditModal={setEditModal}
+          selectedPostData={selectedPostData}
+          editModal={editModal}
+          fetchData={fetchData}
+        />
+      )}
+
+      {openDeleteModal && (
+        <DeleteMessage
+          setIsDeleteModal={setOpenDeleteModal}
+          setIsDelete={setIsDelete}
+          handleDelete={handleDelete}
+          selectedPostData={selectedPostData}
+        />
+      )}
     </div>
   );
 }

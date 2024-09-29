@@ -11,8 +11,22 @@ $backgroundColor : "#2F2E2F";
 @import 'modal';
 @import 'home';
 @import 'form';
+@import 'responsive';
+@import 'button';
 
 
+.heading {
+    &_h1 {
+        font-size: 2rem;
+    }
+
+    &_h2 {}
+
+}
+
+.heading_h2 {
+    font-size: 1rem;
+}
 
 body {
     font-family: $bodyFont;
@@ -45,4 +59,34 @@ body {
     -moz-border-radius: 8px;
     -ms-border-radius: 8px;
     -o-border-radius: 8px;
+}
+
+
+.fade-in-down {
+    animation: fade-in-down 0.5s ease-in-out;
+}
+
+@keyframes fade-in-down {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.skeleton{
+    z-index: -2;
+}
+
+
+.flexbox{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 40px;
 }

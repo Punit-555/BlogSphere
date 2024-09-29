@@ -9,6 +9,7 @@
   align-items: center;
   justify-content: center;
   animation: fadeIn 0.3s ease-in-out;
+  z-index: 9999 !important;  
 }
 
 .modal-content {
@@ -19,14 +20,14 @@
   max-width: 100%;
   position: relative;
   animation: slideIn 0.3s ease-in-out;
-  z-index: 99999999;
+  z-index: 10000 !important; 
 }
 
 .modal-close {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #ff5f5f;
+  background-color: #2F2E2E;
   border: none;
   color: #fff;
   border-radius: 50%;
@@ -38,6 +39,7 @@
   cursor: pointer;
   font-size: 1.2rem;
 }
+
 
 @keyframes fadeIn {
   from {

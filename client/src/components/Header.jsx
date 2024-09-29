@@ -1,13 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Auth from "./Auth";
-import { VscAccount } from "react-icons/vsc";
 import { toast } from "react-toastify";
 import { LoaderContext } from "../context/LoaderContext";
+import { AuthContext } from "../context/userAuth";
 
 const Header = () => {
-  const [isModalOpen, setModalOpen] = useState(true);
+  const ref = useRef(null);
+  const [isModalOpen, setModalOpen] = useState(false);
   const [profile, setProfile] = useState();
+  const { userDetails } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const openModal = () => setModalOpen(true);
@@ -43,64 +45,52 @@ const Header = () => {
     }
     setProfile("");
   };
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollTop = 0;
+    }
+  }, []);
+
   return (
-    <header>
-      <h1
-        className="logo"
-        onClick={() => {
-          navigate("/");
-        }}
-        style={{ cursor: "pointer" }}
-      >
-        {" "}
-        BlogSphere
-      </h1>
-      <ul>
-        <li>
-          <Link to="/">HOME</Link>
-        </li>
-        <li>
-          <Link to="/about">ABOUT US</Link>
-        </li>
-        <li>
-          <Link to="/services">SERVICES</Link>
-        </li>
-        <li>
-          <Link to="/contact">CONTACT</Link>
-        </li>
-        {accessToken && (
-          <li>
-            <Link to="/blogs">BLOGS</Link>
-          </li>
-        )}
-      </ul>
-      <div className="accounts">
-        {accessToken ? (
-          <div>
+    <header className="header-fixed" ref={ref}>
+      <div className="header-limiter">
+        <h1
+          className="logo"
+          onClick={() => {
+            navigate("/");
+          }}
+          style={{ cursor: "pointer" }}
+        >
+          {" "}
+          BlogSphere
+        </h1>
+
+        <nav className="nav_item">
+          {accessToken && <Link to="/blogs">Blogs</Link>}
+          <Link to="/contact">Contact</Link>
+
+          {accessToken ? (
             <select
               name="profile"
               id=""
-              className="select_field_input"
+              className="profile_select"
               onChange={handleProfileChange}
+              defaultValue={""}
             >
               <option value="" selected disabled>
-                Account
+                Hi, {userDetails?.name?.split(" ")[0]}
               </option>
               <option value="profile">Profile</option>
               <option value="logout">Logout</option>
             </select>
-            {/* <button className="user_btn" onClick={logoutHandler}>
-              Logout
-              <VscAccount />
-            </button> */}
-          </div>
-        ) : (
-          <button className="user_btn" onClick={openModal}>
-            Login / Register <VscAccount />
-          </button>
-        )}
+          ) : (
+            <button className="btn  btn_login" onClick={openModal}>
+              Login / Register
+            </button>
+          )}
+        </nav>
       </div>
-
       <Auth isOpen={isModalOpen} onClose={closeModal} />
     </header>
   );

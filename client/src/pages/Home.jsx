@@ -1,124 +1,212 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import bannerImage from "../assets/banner-img.jpg";
 import { TiArrowRightThick } from "react-icons/ti";
-import axios from "axios";
-import { LoaderContext } from "../context/LoaderContext";
-import { AuthContext } from "../context/userAuth";
-
-const truncateText = (text, limit) => {
-  const words = text.split(" ");
-  if (words.length <= limit) return text;
-  return words.slice(0, limit).join(" ") + "...";
-};
-
-const CardContent = ({ text, val }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const limit = 25;
-  const truncatedText = truncateText(text, limit);
-
-  return (
-    <div>
-      <p>{isExpanded ? text : truncatedText}</p>
-      {text.split(" ").length > limit && (
-        <p onClick={() => setIsExpanded(!isExpanded)}>
-          {isExpanded ? "Show Less" : "Continue reading..."}
-        </p>
-      )}
-    </div>
-  );
-};
+import { IoSearch } from "react-icons/io5";
+import { searchPosts } from "../api/postApi";
+import { allPosts } from "../api/getApi";
+import BlogCard from "../components/BlogCard";
+import ReactLoadingSkeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import Select from "react-select";
+import { categoryOptions, options } from "../utility";
 
 function Home() {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [allPostData, setAllPostData] = useState([]);
-  const { setIsLoading } = useContext(LoaderContext);
+  const [isSkeletonLoader, setIsSkeletonLoader] = useState(true);
+  const [isDataLoader, setIsDataLoader] = useState(true);
+
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [enteredValue, setEnteredValue] = useState("");
+
+  const handleCategoryChange = (selectedOption) => {
+    setSelectedCategory(selectedOption);
+  };
+
+  const handleTextChange = (e) => {
+    setEnteredValue(e.target.value);
+  };
 
   useEffect(() => {
-    const getAllPost = async () => {
+    const searchData = async () => {
       try {
-        setIsLoading(true);
-        const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/posts/all-posts`
-        );
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 1000);
-        console.log("DATA", response);
-        setAllPostData(response?.data);
-        return response?.data;
+        setIsSkeletonLoader(true);
+
+        const response = await searchPosts({
+          selectedCategory: selectedCategory?.value,
+          enteredValue: enteredValue,
+        });
+        setAllPostData(response);
       } catch (error) {
         console.error(error);
-        return error;
+      } finally {
+        setIsSkeletonLoader(false);
       }
     };
-    getAllPost();
+    console.log("SSSSSSSSSSS", selectedCategory, enteredValue);
+    const getAllPosts = async () => {
+      try {
+        setIsSkeletonLoader(true);
+        const response = await allPosts();
+        setAllPostData(response);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsSkeletonLoader(false);
+      }
+    };
+
+    if (enteredValue === "" && !selectedCategory) {
+      getAllPosts();
+    } else {
+      searchData();
+    }
+  }, [selectedCategory, enteredValue]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsDataLoader(false);
+    }, 1000);
   }, []);
-  
-  console.log("POSTS", allPostData);
+
   return (
     <div className="home_container">
-      <section className="banner_section">
+      <section className="banner_section fade-in-down">
         <div>
-          <h1>
-            A catchy and relevant headline that captures the essence of your
-            blog.
-          </h1>
-          <p>
-            A brief, engaging description or tagline that adds context to the
-            heading.
-          </p>
+          {isDataLoader ? (
+            <ReactLoadingSkeleton
+              height={100}
+              width={600}
+              style={{ zIndex: "-2" }}
+            />
+          ) : (
+            <>
+              <h1 className="heading heading_h2" style={{ fontWeight: "500" }}>
+                A catchy and relevant headline that captures the essence of your
+                blog.
+              </h1>
+            </>
+          )}
+
+          {isDataLoader ? (
+            <ReactLoadingSkeleton
+              height={60}
+              width={400}
+              style={{ margin: "20px 0px", zIndex: "-2" }}
+            />
+          ) : (
+            <p>
+              A brief, engaging description or tagline that adds context to the
+              heading.
+            </p>
+          )}
+
           <button className="readMore">
             Read More <TiArrowRightThick className="readmoreIcon" />
           </button>
         </div>
 
         <div>
-          {!imageLoaded && (
-            <div className="image-placeholder">
-              <img
-                className="banner_image"
-                src={bannerImage}
-                alt="Banner"
-                onLoad={() => setImageLoaded(true)}
-                style={{ display: imageLoaded ? "block" : "none" }}
-                onError={bannerImage}
-              />
-            </div>
+          {isDataLoader ? (
+            <ReactLoadingSkeleton
+              height={400}
+              width={700}
+              style={{ zIndex: "-2" }}
+            />
+          ) : (
+            <img
+              className="banner_image"
+              src={bannerImage}
+              alt="Banner"
+              onLoad={() => setImageLoaded(true)}
+              style={{ display: imageLoaded ? "block" : "none" }}
+              onError={(e) => (e.target.style.display = "none")}
+            />
           )}
-          <img
-            className="banner_image"
-            src={bannerImage}
-            alt="Banner"
-            onLoad={() => setImageLoaded(true)}
-            style={{ display: imageLoaded ? "block" : "none" }}
-          />
         </div>
       </section>
 
-      <h1>All Posts</h1>
       <section className="blog_section">
-        <div className="card_container">
-          {allPostData.length > 0 &&
-            allPostData?.map((val, index) => {
-              return (
-                <div className="card" key={index}>
-                  <h3>
-                    {val?.title} ,
-                    <span
-                      style={{
-                        color: "grey",
-                        fontWeight: "100",
-                        fontSize: "0.9em",
-                      }}
-                    >
-                      &nbsp; 2 min ago
-                    </span>
-                  </h3>
-                  <CardContent text={val?.content} val={val} />
-                  <br />
+        <div>
+          <div className="search_container">
+            <div className="input_container">
+              <label htmlFor="select">Search By</label>
+              <br />
+              <Select
+                options={options}
+                value={selectedCategory}
+                onChange={handleCategoryChange}
+                className="select_category"
+                placeholder="Select a category"
+                styles={{
+                  control: (baseStyles, state) => ({
+                    ...baseStyles,
+                    minWidth: "160px",
+                  }),
+                }}
+              />
+            </div>
+
+            {selectedCategory?.value === "category" ? (
+              <div className="">
+                <label htmlFor="category-select">Select Category</label>
+                <br />
+                <Select
+                  options={categoryOptions}
+                  value={categoryOptions.find(
+                    (option) => option.value === enteredValue
+                  )}
+                  onChange={(option) => setEnteredValue(option?.value || "")}
+                  className=""
+                  placeholder="Select a category"
+                  isClearable
+                />
+              </div>
+            ) : (
+              selectedCategory?.value == "title" && (
+                <div className="input_container">
+                  <label htmlFor="search-input">
+                    Enter {selectedCategory?.value}
+                  </label>
+                  <input
+                    type="text"
+                    className="input_field"
+                    name="enteredValue"
+                    placeholder="Type here..."
+                    value={enteredValue}
+                    onChange={handleTextChange}
+                    style={{ marginTop: "1px", padding: "10px" }}
+                  />
                 </div>
-              );
-            })}
+              )
+            )}
+
+            <div className="btn_group">
+              <button
+                style={{
+                  marginBottom: "2px",
+                  padding: "13px",
+                  marginTop: "18px",
+                }}
+                className="search-btn"
+                onClick={() => {
+                  if (selectedCategory?.value === "category" && !enteredValue) {
+                    alert("Please select a category or enter a search term.");
+                  }
+                }}
+              >
+                <IoSearch />
+                Search
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="card_container fade-in-down">
+          <BlogCard
+            isSkeletonLoader={isSkeletonLoader}
+            allPostData={allPostData}
+          />
         </div>
       </section>
     </div>
